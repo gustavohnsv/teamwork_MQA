@@ -57,7 +57,7 @@ voyage_began_head <- sortElementsInDescendingOrder(voyage_began, 12)
 voyage_disembarkation <- table(sorted_filtered_positive_data$Voyage.itinerary.imputed.principal.port.of.slave.disembarkation..mjslptimp..place)
 voyage_disembarkation_head <- sortElementsInDescendingOrder(voyage_disembarkation, 12)
 
-# Criando variáveis temporárias para armzenar em dois ´data frames´ abaixo
+# Criando variáveis temporárias para armazenar em dois ´data frames´ abaixo
 total <- sorted_filtered_positive_data$Total.embarked
 male <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.men))
 female <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.women))
@@ -93,7 +93,7 @@ percent_numbers_err <- data.frame(
 # Removendo dados temporários que não estão sendo mais utilizados
 rm(total, male, female, children, error)
 
-# Agrupando os anos em intervalos de 20 anos, e obtendo as informações mais relevantes
+# Agrupando os anos em intervalos de 100 anos, e obtendo as informações mais relevantes
 year_by_group <- sorted_filtered_positive_data %>%
   mutate(Century = cut(Year.of.arrival.at.port.of.disembarkation, 
                    breaks = seq(min(Year.of.arrival.at.port.of.disembarkation, na.rm = TRUE), 

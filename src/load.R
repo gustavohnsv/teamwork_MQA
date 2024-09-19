@@ -1,6 +1,6 @@
 # Verifica se está no diretório correto para tentar ler o arquivo
-if (!(grepl("/RStudioProjects/teamwork_MQA", getwd()))) {
-  setwd("RStudioProjects/teamwork_MQA")  
+if (!(grepl("/Documentos/workspace/teamwork_MQA", getwd()))) {
+  setwd("Documentos/workspace/teamwork_MQA")  
 }
 
 file_path <- "./data/trafico-escravos-variaveis-utilizadas.csv"
