@@ -13,6 +13,9 @@ sorted_filtered_positive_data$Percent.men <- gsub(",", ".", sorted_filtered_posi
 sorted_filtered_positive_data$Percent.women <- gsub(",", ".", sorted_filtered_positive_data$Percent.women)
 sorted_filtered_positive_data$Percent.children <- gsub(",", ".", sorted_filtered_positive_data$Percent.children)
 
+# Garantindo que o ano seja um valor numérico
+sorted_filtered_positive_data$Year.of.arrival.at.port.of.disembarkation <- as.numeric(sorted_filtered_positive_data$Year.of.arrival.at.port.of.disembarkation)
+
 # Bibliteca para exibição de gráficos
 library(ggplot2)
 
@@ -21,6 +24,9 @@ library(reshape)
 
 # Biblitoeca para exibição de gráficos de pizza
 library(plotrix)
+
+# Biblioteca para funções especiais
+library(dplyr)
 
 # Criando um quadro de dados para as porcentagens de homens, mulheres e criança com base no ano
 percents_df <- data.frame(
@@ -51,16 +57,53 @@ voyage_began_head <- sortElementsInDescendingOrder(voyage_began, 12)
 voyage_disembarkation <- table(sorted_filtered_positive_data$Voyage.itinerary.imputed.principal.port.of.slave.disembarkation..mjslptimp..place)
 voyage_disembarkation_head <- sortElementsInDescendingOrder(voyage_disembarkation, 12)
 
+# Criando variáveis temporárias para armzenar em dois ´data frames´ abaixo
 total <- sorted_filtered_positive_data$Total.embarked
 male <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.men))
 female <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.women))
 children <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.children))
 error <- total - (male + female + children)
 
+# Corrigindo as linhas onde o erro é negativo, ou seja, o erro foi causado por contagem incorreta dos dados
+for (i in 1:length(error)) {
+  if (is.na(error[i])) next
+  else if (error[i] < 0) {
+    print(error[i])
+    total[i] <- total[i] + error[i]
+    male <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.men))
+    female <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.women))
+    children <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.children))
+    error[i] <- NA
+  }
+}
+
+# Armazendo o total de escravos embarcados separados por gênero
 percents_numbers <- data.frame(
   male = male,
   female = female,
   children = children
 )
 
-rm(male, female, children)
+# Armazenando o total embarcado, seguido de uma parcela de erro por arredondamento/contagem incorreta
+percent_numbers_err <- data.frame(
+  total = total,
+  error = error
+)
+
+# Removendo dados temporários que não estão sendo mais utilizados
+rm(total, male, female, children, error)
+
+# Agrupando os anos em intervalos de 20 anos, e obtendo as informações mais relevantes
+year_by_group <- sorted_filtered_positive_data %>%
+  mutate(Century = cut(Year.of.arrival.at.port.of.disembarkation, 
+                   breaks = seq(min(Year.of.arrival.at.port.of.disembarkation, na.rm = TRUE), 
+                                max(Year.of.arrival.at.port.of.disembarkation, na.rm = TRUE), 
+                                by = 20),
+                   right = FALSE)) %>%
+  group_by(Century) %>%
+  summarise(
+    Sum_embarked = sum(Total.embarked, na.rm = TRUE),
+    Sum_disembarked = sum(Total.disembarked, na.rm = TRUE),
+    Sum_deaths = sum(Captive.deaths.during.crossing, na.rm = TRUE),
+    Mean_duration = mean(Duration.of.captives..crossing..in.days., na.rm = TRUE)
+  )
