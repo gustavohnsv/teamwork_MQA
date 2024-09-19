@@ -107,3 +107,50 @@ year_by_group <- sorted_filtered_positive_data %>%
     Sum_deaths = sum(Captive.deaths.during.crossing, na.rm = TRUE),
     Mean_duration = mean(Duration.of.captives..crossing..in.days., na.rm = TRUE)
   )
+
+#
+# Exibição de total de mortos com base em categorias de século
+#
+
+# Função para determinar o século
+define_century <- function(year){
+  if (year >= 1600 & year < 1700) {
+    return("17th_century")
+  } else if (year >= 1700 & year < 1800) {
+    return("18th_century")
+  } else if (year >= 1800 & year < 1900) {
+    return("19th_century")
+  } else {
+    return(NA)
+  }
+  
+}
+
+# Aplicar a função ao dataframe para criar uma nova coluna 'Century'
+sorted_filtered_positive_data$Century <- sapply(sorted_filtered_positive_data$Year.of.arrival.at.port.of.disembarkation, define_century)
+
+# Filtrar os dados por século
+data_17th_century <- subset(sorted_filtered_positive_data, Century == "17th_century")
+data_18th_century <- subset(sorted_filtered_positive_data, Century == "18th_century")
+data_19th_century <- subset(sorted_filtered_positive_data, Century == "19th_century")
+
+# Serve para indicar o tamanho máximo da tabela
+max_length <- max(nrow(data_17th_century), nrow(data_18th_century), nrow(data_19th_century))
+
+# Criar data frames para cada século, preenchendo com NA onde necessário
+df_17th_century <- data.frame(
+  "17th_century" = c(data_17th_century$Captive.deaths.during.crossing, 
+                     rep(NA, max_length - nrow(data_17th_century)))
+)
+df_18th_century <- data.frame(
+  "18th_century" = c(data_18th_century$Captive.deaths.during.crossing, 
+                     rep(NA, max_length - nrow(data_18th_century)))
+)
+df_19th_century <- data.frame(
+  "19th_century" = c(data_19th_century$Captive.deaths.during.crossing, 
+                     rep(NA, max_length - nrow(data_19th_century)))
+)
+
+# Combinar os data frames em um único data frame
+deaths_by_century <- cbind(df_17th_century, df_18th_century, df_19th_century)
+
