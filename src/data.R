@@ -98,7 +98,7 @@ year_by_group <- sorted_filtered_positive_data %>%
   mutate(Century = cut(Year.of.arrival.at.port.of.disembarkation, 
                    breaks = seq(min(Year.of.arrival.at.port.of.disembarkation, na.rm = TRUE), 
                                 max(Year.of.arrival.at.port.of.disembarkation, na.rm = TRUE), 
-                                by = 20),
+                                by = 100),
                    right = FALSE)) %>%
   group_by(Century) %>%
   summarise(
