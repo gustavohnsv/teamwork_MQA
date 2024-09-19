@@ -8,6 +8,9 @@ sorted_filtered_positive_data <- subset(sorted_filtered_data,
                                           sorted_filtered_data$Percent.children > 0
 )
 
+# Removendo os dados filtrados intermediários
+rm(sorted_filtered_data)
+
 # Substituindo todas as aparições de "," por "." para valores com ponto flutuante
 sorted_filtered_positive_data$Percent.men <- gsub(",", ".", sorted_filtered_positive_data$Percent.men)
 sorted_filtered_positive_data$Percent.women <- gsub(",", ".", sorted_filtered_positive_data$Percent.women)
@@ -153,4 +156,3 @@ df_19th_century <- data.frame(
 
 # Combinar os data frames em um único data frame
 deaths_by_century <- cbind(df_17th_century, df_18th_century, df_19th_century)
-
