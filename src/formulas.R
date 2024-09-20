@@ -72,7 +72,9 @@ glErr <- function(data) {
 desvioPadraoVariancia <- function(data, opt) {
   num <- sum(!is.na(data))
   mean <- mean(data, na.rm = TRUE)
-  res <- sum((data - mean)^2/num-1, na.rm = TRUE)
+  a <- (data - mean)^2
+  b <- num - 1
+  res <- sum(a/b, na.rm = TRUE)
   return(ifelse(opt == 1, sqrt(res), res))
 }
 
