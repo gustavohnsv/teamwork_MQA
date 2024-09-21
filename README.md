@@ -6,7 +6,7 @@ The Transatlantic Slave Trade Database is the result of independent and collabor
 
 $$ SQTotal =  \sum_{i=1}^{g}\sum_{j=1}^{n}\left ( y_{ij}  - \bar{y_{..}} \right  )^2 $$
 
-$$ SQTrat = \sum_{i=1}^{g}\sum_{j=1}^{n}\left ( \bar{y{i}}- \bar{y_{..}} \right )^2 $$
+$$ SQTrat = \sum_{i=1}^{g}\sum_{j=1}^{n}\left ( \bar{y_{i}}- \bar{y_{..}} \right )^2 $$
 
 $$ SQE = \sum_{i=1}^{g}\sum_{j=1}^{n}\left ( y_{ij} - \bar{y_{i}} \right )^2 $$
 
