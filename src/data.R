@@ -12,9 +12,9 @@ sorted_filtered_positive_data <- subset(sorted_filtered_data,
 rm(sorted_filtered_data)
 
 # Substituindo todas as aparições de "," por "." para valores com ponto flutuante
-sorted_filtered_positive_data$Percent.men <- gsub(",", ".", sorted_filtered_positive_data$Percent.men)
-sorted_filtered_positive_data$Percent.women <- gsub(",", ".", sorted_filtered_positive_data$Percent.women)
-sorted_filtered_positive_data$Percent.children <- gsub(",", ".", sorted_filtered_positive_data$Percent.children)
+sorted_filtered_positive_data$Percent.men <- as.numeric(gsub(",", ".", sorted_filtered_positive_data$Percent.men))
+sorted_filtered_positive_data$Percent.women <- as.numeric(gsub(",", ".", sorted_filtered_positive_data$Percent.women))
+sorted_filtered_positive_data$Percent.children <- as.numeric(gsub(",", ".", sorted_filtered_positive_data$Percent.children))
 
 # Garantindo que o ano seja um valor numérico
 sorted_filtered_positive_data$Year.of.arrival.at.port.of.disembarkation <- as.numeric(sorted_filtered_positive_data$Year.of.arrival.at.port.of.disembarkation)
@@ -33,14 +33,14 @@ library(dplyr)
 
 # Criando um quadro de dados para as porcentagens de homens, mulheres e criança com base no ano
 percents_df <- data.frame(
-  total = sorted_filtered_positive_data$Total.embarked,
+  year = sorted_filtered_positive_data$Year.of.arrival.at.port.of.disembarkation,
   p_m = sorted_filtered_positive_data$Percent.men,
   p_w = sorted_filtered_positive_data$Percent.women,
   p_c = sorted_filtered_positive_data$Percent.children
 )
 
 # Unindo as porcentagens de homens, mulheres e crianças em uma coluna categorizada 
-melt_percent_df <- melt(percents_df, id.vars = "total", measure.vars = c(2, 3, 4))
+melt_percent_df <- melt(percents_df, id.vars = "year", measure.vars = c(2, 3, 4))
 
 # Convertendo os valores das porcentagens de 'character' para 'numeric'
 melt_percent_df$value <- as.numeric(as.character(melt_percent_df$value))
