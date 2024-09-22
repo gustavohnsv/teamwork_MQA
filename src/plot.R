@@ -52,24 +52,40 @@ pie3D(voyage_disembarkation_head,
 # Boxplot do número de mortes durante travessia por século
 boxplot(sorted_filtered_positive_data$Captive.deaths.during.crossing
         ~ sorted_filtered_positive_data$Century,
-        col = c("#FF0000", "#00FF00", "#0000FF"))
+        col = c("#FF0000", "#00FF00", "#0000FF"),
+        names = c("Século 17", "Século 18", "Século 19"),
+        main = "Quantidade de mortes durante as viagens por século",
+        xlab = "Séculos",
+        ylab = "Quantidade de mortes durante as viagens")
 
 # Histograma do número de mortes com gráfico de densidade
 ggplot(sorted_filtered_positive_data, aes(x = Captive.deaths.during.crossing)) +
   geom_histogram(aes(y = ..density..), colour = 1, fill = "#FFFFFF", bins = 100) +
-  geom_density(lwd = 1.2, linetype = 2, colour = "#FF0000", fill = "#FF0000", alpha = 0.25)
+  geom_density(lwd = 1.2, linetype = 2, colour = "#FF0000", fill = "#FF0000", alpha = 0.25) +
+  labs(x = "Quantidade de mortes") +
+  labs(y = "Densidade") +
+  labs(title = "Distrivuição da quantidade de mortes durante as viagens")
 
 # Histograma da porcentagem de homens por viagem com gráfico de densidade
 ggplot(sorted_filtered_positive_data, aes(x = Percent.men)) +
   geom_histogram(aes(y = ..density..), colour = 1, fill = "#FFFFFF", bins = 100) +
-  geom_density(lwd = 1.2, linetype = 2, colour = "#1E90FF", fill = "#1E90FF", alpha = 0.25)
+  geom_density(lwd = 1.2, linetype = 2, colour = "#1E90FF", fill = "#1E90FF", alpha = 0.25) +
+  labs(x = "Quantidade de homens por viagem") +
+  labs(y = "Densidade") +
+  labs(title = "Distribuição de homens durante as viagens")
 
 # Histograma da porcentagem de mulheres por viagem com gráfico de densidade
 ggplot(sorted_filtered_positive_data, aes(x = Percent.women)) +
   geom_histogram(aes(y = ..density..), colour = 1, fill = "#FFFFFF", bins = 100) +
-  geom_density(lwd = 1.2, linetype = 2, colour = "#FF69B4", fill = "#FF69B4", alpha = 0.25)
+  geom_density(lwd = 1.2, linetype = 2, colour = "#FF69B4", fill = "#FF69B4", alpha = 0.25) +
+  labs(x = "Quantidade de mulheres por viagem") +
+  labs(y = "Densidade") +
+  labs(title = "Distribuição de mulheres durante as viagens")
 
 # Histograma da porcentagem de crianças por viagem com gráfico de densidade
 ggplot(sorted_filtered_positive_data, aes(x = Percent.children)) +
   geom_histogram(aes(y = ..density..), colour = 1, fill = "#FFFFFF", bins = 100) +
-  geom_density(lwd = 1.2, linetype = 2, colour = "#32CD32", fill = "#32CD32", alpha = 0.25)
+  geom_density(lwd = 1.2, linetype = 2, colour = "#32CD32", fill = "#32CD32", alpha = 0.25) +
+  labs(x = "Quantidade de crianças por viagem") +
+  labs(y = "Densidade") +
+  labs(title = "Distribuição de crianças durante as viagens")

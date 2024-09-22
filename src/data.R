@@ -71,7 +71,6 @@ error <- total - (male + female + children)
 for (i in 1:length(error)) {
   if (is.na(error[i])) next
   else if (error[i] < 0) {
-    print(error[i])
     total[i] <- total[i] + error[i]
     male <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.men))
     female <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.women))
