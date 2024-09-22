@@ -19,18 +19,6 @@ sorted_filtered_positive_data$Percent.children <- as.numeric(gsub(",", ".", sort
 # Garantindo que o ano seja um valor numérico
 sorted_filtered_positive_data$Year.of.arrival.at.port.of.disembarkation <- as.numeric(sorted_filtered_positive_data$Year.of.arrival.at.port.of.disembarkation)
 
-# Bibliteca para exibição de gráficos
-library(ggplot2)
-
-# Biblioteca para tratamento de dados
-library(reshape)
-
-# Biblitoeca para exibição de gráficos de pizza
-library(plotrix)
-
-# Biblioteca para funções especiais
-library(dplyr)
-
 # Criando um quadro de dados para as porcentagens de homens, mulheres e criança com base no ano
 percents_df <- data.frame(
   year = sorted_filtered_positive_data$Year.of.arrival.at.port.of.disembarkation,
@@ -155,4 +143,3 @@ df_19th_century <- data.frame(
 
 # Combinar os data frames em um único data frame
 deaths_by_century <- cbind(df_17th_century, df_18th_century, df_19th_century)
-

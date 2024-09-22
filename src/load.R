@@ -1,6 +1,3 @@
-# Biblioteca com algumas funções úteis do RStudio
-library(rstudioapi)
-
 # Definindo o diretório de trabalho para a localização da pasta "teamwork_MQA"
 setwd(dirname(dirname(getActiveDocumentContext()$path)))
 

@@ -37,6 +37,10 @@ testDataframe_ShapiroWilk <- function(data) {
   }
 }
 
+test_Levene <- function(var, group) {
+  return(leveneTest(y = var, group = as.factor(group)))
+}
+
 # Função para calcular a moda
 moda <- function(data) {
   data <- data[!is.na(data)]
