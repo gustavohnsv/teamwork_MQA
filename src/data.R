@@ -54,6 +54,8 @@ male <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.men))
 female <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.women))
 children <- floor(total * as.numeric(sorted_filtered_positive_data$Percent.children))
 error <- total - (male + female + children)
+deaths <- sorted_filtered_positive_data$Captive.deaths.during.crossing
+duration <- sorted_filtered_positive_data$Duration.of.captives..crossing..in.days.
 
 # Corrigindo as linhas onde o erro é negativo, ou seja, o erro foi causado por contagem incorreta dos dados
 for (i in 1:length(error)) {
@@ -68,20 +70,24 @@ for (i in 1:length(error)) {
 }
 
 # Armazendo o total de escravos embarcados separados por gênero
-percents_numbers <- data.frame(
+percent_to_number <- data.frame(
   male = male,
   female = female,
   children = children
 )
 
 # Armazenando o total embarcado, seguido de uma parcela de erro por arredondamento/contagem incorreta
-percent_numbers_err <- data.frame(
+ptn_aux <- data.frame(
   total = total,
-  error = error
+  error = error,
+  deaths = deaths,
+  duration = duration
 )
 
+percent_to_number_total <- cbind(percent_to_number, ptn_aux)
+
 # Removendo dados temporários que não estão sendo mais utilizados
-rm(total, male, female, children, error)
+rm(total, male, female, children, error, deaths, duration)
 
 # Agrupando os anos em intervalos de 100 anos, e obtendo as informações mais relevantes
 year_by_group <- sorted_filtered_positive_data %>%

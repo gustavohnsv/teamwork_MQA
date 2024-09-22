@@ -66,6 +66,15 @@ ggplot(sorted_filtered_positive_data, aes(x = Captive.deaths.during.crossing)) +
   labs(y = "Densidade") +
   labs(title = "Distrivuição da quantidade de mortes durante as viagens")
 
+# Histograma da quantidade de mortes durante a travessia por século, mas separado em grupos
+ggplot(sorted_filtered_positive_data, aes(x = Captive.deaths.during.crossing, fill = Century, colour = Century)) +
+  geom_histogram(alpha = 0.5, position = "identity", bins = 50) +
+  labs(x = "Quantidade de mortes durante as viagens") +
+  labs(y = "Quantidade de ocorrências") +
+  labs(title = "Quantidade de ocorrência de mortes durante as viagens") +
+  scale_color_discrete(labels = c("Século 17", "Século 18", "Século 19")) +
+  scale_fill_discrete(labels = c("Século 17", "Século 18", "Século 19"))
+
 # Histograma da porcentagem de homens por viagem com gráfico de densidade
 ggplot(sorted_filtered_positive_data, aes(x = Percent.men)) +
   geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "#FFFFFF", bins = 100) +
@@ -89,4 +98,3 @@ ggplot(sorted_filtered_positive_data, aes(x = Percent.children)) +
   labs(x = "Quantidade de crianças por viagem") +
   labs(y = "Densidade") +
   labs(title = "Distribuição de crianças durante as viagens")
-

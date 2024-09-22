@@ -1,11 +1,11 @@
 # Realiza o teste ANOVA para análise das médias de amostras
-teste_ANOVA <- function(data, var, group) {
+test_ANOVA <- function(data, var, group) {
   return(summary(aov(var ~ group, data = data)))
 }
 
 # Realiza o teste de Tukey para distinguir diferença das médias entre amostras
 test_TukeyHSD <- function(data, var, group) {
-  return(TukeyHSD(teste_ANOVA(data, var, group)))
+  return(TukeyHSD(test_ANOVA(data, var, group)))
 }
 
 # Realiza o teste de Correlação de Pearson para duas variáveis de uma amostra
@@ -15,36 +15,4 @@ test_Corr <- function(var1, var2) {
   } else {
     message("Insira colunas númericas!")
   }
-}
-
-# Realiza o teste de Shapiro-Wilk para garantir se uma variável númerica segue uma curva normal 
-test_ShapiroWilk <- function(data) {
-  if (is.numeric(data)) {
-    return(shapiro.test(data))
-  } else {
-    message("Insira uma coluna númerica!")
-  }
-}
-
-# Realiza o teste de Shapiro-Wilk para garantir se todas as variáveis númericas seguem uma distribuição normal 
-testDataframe_ShapiroWilk <- function(data) {
-  num <- ncol(data)
-  for (j in 1:num) {
-    if (is.numeric(data[, j])) {
-      print(colnames(data[j]))
-      print(shapiro.test(data[, j]))
-    }
-  }
-}
-
-# Realiza o teste de Levene para análise das variâncias de amostras
-test_Levene <- function(var, group) {
-  return(leveneTest(y = var, group = as.factor(group)))
-}
-
-# Função para calcular a moda
-moda <- function(data) {
-  data <- data[!is.na(data)]
-  uniq_value <- unique(data)
-  uniq_value[which.max(tabulate(match(data, uniq_value)))]
 }
