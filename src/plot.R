@@ -89,3 +89,4 @@ ggplot(sorted_filtered_positive_data, aes(x = Percent.children)) +
   labs(x = "Quantidade de crianças por viagem") +
   labs(y = "Densidade") +
   labs(title = "Distribuição de crianças durante as viagens")
+

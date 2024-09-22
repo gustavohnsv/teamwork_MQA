@@ -155,3 +155,4 @@ df_19th_century <- data.frame(
 
 # Combinar os data frames em um único data frame
 deaths_by_century <- cbind(df_17th_century, df_18th_century, df_19th_century)
+
