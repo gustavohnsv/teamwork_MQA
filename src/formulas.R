@@ -5,7 +5,8 @@ test_ANOVA <- function(data, var, group) {
 
 # Realiza o teste de Tukey para distinguir diferença das médias entre amostras
 test_TukeyHSD <- function(data, var, group) {
-  return(TukeyHSD(test_ANOVA(data, var, group)))
+  aov <- aov(var ~ group, data = data)
+  return(TukeyHSD(aov))
 }
 
 # Realiza o teste de Correlação de Pearson para duas variáveis de uma amostra
