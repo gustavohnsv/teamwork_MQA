@@ -51,3 +51,9 @@ if (!requireNamespace("car", quietly = TRUE)) {
   install.packages("car")
 }
 library(car)
+
+# Biblioteca que contém uma variedade de métodos simples de avaliação de estoques pesqueiros.
+if (!requireNamespace("FSA", quietly = TRUE)) {
+  install.packages("FSA")
+}
+library(FSA)

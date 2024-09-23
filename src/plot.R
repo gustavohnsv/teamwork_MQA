@@ -98,3 +98,8 @@ ggplot(sorted_filtered_positive_data, aes(x = Percent.children)) +
   labs(x = "Quantidade de crianças por viagem") +
   labs(y = "Densidade") +
   labs(title = "Distribuição de crianças durante as viagens")
+
+# Gráfico QQ (Quantiles-Quantiles) para análise da "curva de distribuição" da varáivel de mortes durante a viagem
+qqnorm(sorted_filtered_positive_data$Captive.deaths.during.crossing, main = "Gráfico QQ")
+qqline(sorted_filtered_positive_data$Captive.deaths.during.crossing, col = "#FF0000")
+  

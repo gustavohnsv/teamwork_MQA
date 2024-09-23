@@ -1,12 +1,21 @@
-# Realiza o teste ANOVA para análise das médias de amostras
+# Realiza o teste ANOVA para análise das médias de amostras (teste paramétrico)
 test_ANOVA <- function(data, var, group) {
   return(summary(aov(var ~ group, data = data)))
 }
 
-# Realiza o teste de Tukey para distinguir diferença das médias entre amostras
-test_TukeyHSD <- function(data, var, group) {
-  aov <- aov(var ~ group, data = data)
-  return(TukeyHSD(aov))
+# Realiza o teste de Kruskal-Wallis para análise das médias de amostras (teste não paramétrico)
+test_KruskalWallis <- function(data, var, group) {
+  return(kruskal.test(formula = var ~ group, data = data))
+}
+
+# Realiza o teste de Levene para análise das variâncias de amostras
+test_Levene <- function(var, group) {
+  return(leveneTest(y = var, group = as.factor(group)))
+}
+
+# Realiza o teste de Dunn para analisar quais dos grupos se diferem baseado no teste Kruskal-Wallis (não paramétrico)
+test_Dunn <- function(data, var, group) {
+  return(dunnTest(var ~ as.factor(group), data = data, method="bonferroni"))
 }
 
 # Realiza o teste de Correlação de Pearson para duas variáveis de uma amostra
@@ -36,11 +45,6 @@ testDataframe_ShapiroWilk <- function(data) {
       print(shapiro.test(data[, j]))
     }
   }
-}
-
-# Realiza o teste de Levene para análise das variâncias de amostras
-test_Levene <- function(var, group) {
-  return(leveneTest(y = var, group = as.factor(group)))
 }
 
 # Função para calcular a moda
