@@ -57,3 +57,9 @@ if (!requireNamespace("FSA", quietly = TRUE)) {
   install.packages("FSA")
 }
 library(FSA)
+
+# Biblioteca utilizada para aplicação do teste de normalidade de Anderson-Darling
+if (!requireNamespace("nortest", quietly = TRUE)) {
+  install.packages("nortest")
+}
+library(nortest)

@@ -47,6 +47,26 @@ testDataframe_ShapiroWilk <- function(data) {
   }
 }
 
+# Realiza o teste de Anderson-Darling para garantir se uma variável númerica segue uma curva normal
+test_AndersonDarling <- function(data) {
+  if (is.numeric(data)) {
+    return(ad.test(data))
+  } else {
+    message("Insira uma coluna númerica!")
+  }
+}
+
+# Realiza o teste de Anderson-Darling para garantir se todas as variáveis númericas seguem uma distribuição normal 
+testDataframe_AndersonDarling <- function(data) {
+  num <- ncol(data)
+  for (j in 1:num) {
+    if (is.numeric(data[, j])) {
+      print(colnames(data[j]))
+      print(ad.test(data[, j]))
+    }
+  }
+}
+
 # Função para calcular a moda
 moda <- function(data) {
   data <- data[!is.na(data)]
