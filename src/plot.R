@@ -4,6 +4,19 @@ ggplot(wines, aes(x = pH)) +
   geom_density(lwd = 1.2, linetype = 2, colour = "#FF69B4", fill = "#FF69B4", alpha = 0.25)
 
 # Gráfico de dispersão com uma linha de correlação para as variáveis pH e ácido cítrico
-ggplot(wines, aes(x = pH, y = citric.acid)) +
+ggplot(wines, aes(x = volatile.acidity, y = chlorides)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE)
+
+# Mapa de calor para cada par de colunas das colunas de vinho
+wines_cor_matrix <- cor(wines_numeric, use = "complete.obs")
+pheatmap(wines_cor_matrix,
+         display_numbers = TRUE,
+         number_color = "#000000",
+         fontsize_number = 8)
+rm(wines_cor_matrix)
+
+# Gráficos de dispersão comparando cada variável com um densidade (precisa de atenção)
+png("multiplecorplot1", width = 800, height = 600)
+avPlots(lm(formula = density ~ residual.sugar+alcohol+fixed.acidity+chlorides , data = wines))
+dev.off()

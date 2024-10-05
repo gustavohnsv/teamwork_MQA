@@ -21,7 +21,7 @@ test_Dunn <- function(data, var, group) {
 # Realiza o teste de Correlação de Pearson para duas variáveis de uma amostra
 test_Corr <- function(var1, var2) {
   if (is.numeric(var1) && is.numeric(var2)) {
-    cor(var1, var2, method = "pearson", use = "complete.obs")
+    return(cor(var1, var2, method = "pearson", use = "complete.obs"))
   } else {
     message("Insira colunas númericas!")
   }
