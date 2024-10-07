@@ -3,7 +3,7 @@ white_wines$colour <- "white"
 red_wines$colour <- "red"
 
 # Combina os datasets para um único
-wines <- rbind(white_wines, red_wines)
+wines <- rbind(white_wines, red_winess)
 
 # Retira possíveis observações com campos NA
 wines <- na.omit(wines)
@@ -18,15 +18,15 @@ wines_sample <- wines[sample(nrow(wines), size = 5000, replace = FALSE), ]
 wines_numeric <- wines[, sapply(wines, is.numeric)]
 
 # Obtem o número de colunas de "wines_numeric"
-ncol <- ncol(wines_numeric)
+wines_numeric_cols <- ncol(wines_numeric)
 
 # Exibe o coeficiente de correlação de cada variável
-for (i in which(numeric_col)) {
-  for (j in which(numeric_col)) {
+for (i in 1:wines_numeric_cols) {
+  for (j in 1:wines_numeric_cols) {
     print(paste(colnames(wines[i]), " x ", colnames(wines[j])))
     print(test_Corr(wines[, i], wines[, j]))
   }
 }
 
 # Remove as variáveis temporárias para o loop
-rm(i, j, ncol)
+rm(i, j, wines_numeric_cols)

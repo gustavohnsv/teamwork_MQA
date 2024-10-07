@@ -17,6 +17,6 @@ pheatmap(wines_cor_matrix,
 rm(wines_cor_matrix)
 
 # Gráficos de dispersão comparando cada variável com um densidade (precisa de atenção)
-png("multiplecorplot1", width = 800, height = 600)
+png("temp_multcorplot1", width = 1000, height = 1000)
 avPlots(lm(formula = density ~ residual.sugar+alcohol+fixed.acidity+chlorides , data = wines))
 dev.off()
