@@ -67,6 +67,12 @@ testDataframe_AndersonDarling <- function(data) {
   }
 }
 
+test_MultipleCorrelation <- function(data, y, ...) {
+  predictors <- quos(...)
+  formula <- reformulate(termlabels = sapply(predictors, quo_name), response = y)
+  summary(lm(formula = formula, data = data))
+}
+
 # Função para calcular a moda
 moda <- function(data) {
   data <- data[!is.na(data)]
