@@ -36,20 +36,16 @@ corr_df <- data.frame (
 # Exibe o coeficiente de correlação de cada variável
 for (i in 1:wines_numeric_cols) {
   for (j in 1:wines_numeric_cols) {
-    print(paste(colnames(wines[i]), " x ", colnames(wines[j])))
-    
+
     corr_test_result <- test_Corr(wines[, i], wines[, j])
     
-    print(corr_test_result)
-    
     # Adicionar ao dataframe que mostra coeficiente de correlação por variável
-    corr_test_result_module <- abs(corr_test_result)
 
     if(corr_test_result != 1){
-      corr_df <- rbind(corr_df, data.frame(variable_1 = colnames(wines[i]), corr_value = corr_test_result, variable_2 = colnames(wines[j]), corr_value_module = corr_test_result_module))
+      corr_df <- rbind(corr_df, data.frame(variable_1 = colnames(wines[i]), corr_value = corr_test_result, variable_2 = colnames(wines[j]), corr_value_module = abs(corr_test_result)))
     }
   }
 }
 
 # Remove as variáveis temporárias para o loop
-rm(i, j, wines_numeric_cols)
+rm(i, j, wines_numeric_cols, corr_test_result)
