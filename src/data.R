@@ -25,11 +25,29 @@ wines_numeric <- wines[, sapply(wines, is.numeric)]
 # Obtem o número de colunas de "wines_numeric"
 wines_numeric_cols <- ncol(wines_numeric)
 
+# Criação de Dataframe para mostrar coeficiente de correlação de cada variável
+corr_df <- data.frame (
+  variable_1 = character(),
+  corr_value = numeric(),
+  variable_2 = character(),
+  corr_value_module = numeric()
+)
+
 # Exibe o coeficiente de correlação de cada variável
 for (i in 1:wines_numeric_cols) {
   for (j in 1:wines_numeric_cols) {
     print(paste(colnames(wines[i]), " x ", colnames(wines[j])))
-    print(test_Corr(wines[, i], wines[, j]))
+    
+    corr_test_result <- test_Corr(wines[, i], wines[, j])
+    
+    print(corr_test_result)
+    
+    # Adicionar ao dataframe que mostra coeficiente de correlação por variável
+    corr_test_result_module <- abs(corr_test_result)
+
+    if(corr_test_result != 1){
+      corr_df <- rbind(corr_df, data.frame(variable_1 = colnames(wines[i]), corr_value = corr_test_result, variable_2 = colnames(wines[j]), corr_value_module = corr_test_result_module))
+    }
   }
 }
 
