@@ -70,3 +70,9 @@ if (!requireNamespace("nortest", quietly = TRUE)) {
 }
 library(nortest)
 
+
+# Biblioteca utilizada para formatação das tabelas de frequência
+if (!requireNamespace("formattable", quietly = TRUE)) {
+  install.packages("formattable")
+}
+library(formattable)

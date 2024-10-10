@@ -108,6 +108,15 @@ create_freq_tables <- function(column) {
     Frequencia_Relativa_Acumulada = cumsum(as.vector(rel_freq))
   )
   
+  # 7. Formatar para melhor exibição
+  freq_tables <- formattable(freq_tables, list(
+    Intervalos = formatter("span", style = x ~ style(color = "black", font.weight = "bold", font.size = "16px")),
+    Frequencia_Absoluta = formatter("span", style = x ~ style(color = "black", font.weight = "bold", font.size = "16px")),
+    Frequencia_Relativa = formatter("span", style = x ~ style(color = "black", font.weight = "bold", font.size = "16px")),
+    Frequencia_Absoluta_Acumulada = formatter("span", style = x ~ style(color = "black", font.weight = "bold", font.size = "16px")),
+    Frequencia_Relativa_Acumulada = formatter("span", style = x ~ style(color = "black", font.weight = "bold", font.size = "16px"))
+  ))
+  
   return(freq_tables)
 }
 

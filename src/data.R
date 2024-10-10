@@ -52,6 +52,7 @@ rm(i, j, wines_numeric_cols, corr_test_result)
 
 #Tabela de distribuição de frequências para densidade
 density_freq_tables <- create_freq_tables(wines_sample$density)
+formattable(density_freq_tables)
 
 #Tabela de distribuição de frequências para álcool
 alcohol_freq_tables <- create_freq_tables(wines_sample$alcohol)
