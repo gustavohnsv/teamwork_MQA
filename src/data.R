@@ -49,4 +49,3 @@ for (i in 1:wines_numeric_cols) {
 
 # Remove as variáveis temporárias para o loop
 rm(i, j, wines_numeric_cols, corr_test_result)
-

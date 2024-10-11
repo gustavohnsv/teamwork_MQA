@@ -35,8 +35,8 @@ test_MultipleCorrelation <- function(data, y, ...) {
   predictors_names <- sapply(predictors, quo_name)
   formula <- reformulate(termlabels = predictors_names, response = response_name)
   model <- lm(formula = formula, data = data)
-  stepwise_model <- step(model, direction = "both", trace = TRUE)
-  return(summary(stepwise_model))
+  stepwise_model <- step(model, direction = "both", k = log(nrow(data)), trace = TRUE)
+  return(stepwise_model)
 }
 
 # Realiza o teste de Shapiro-Wilk para garantir se uma variável númerica segue uma curva normal 
@@ -130,4 +130,9 @@ create_freq_tables <- function(column) {
 simple_linear_regression_sqr_r <- function(y,x){
   model <- lm(y~x)
   return(summary(model)$r.square)
+}
+
+# Padronização (Z-score)
+standardize_z_score <- function(x) {
+  return((x - mean(x)) / sd(x))
 }

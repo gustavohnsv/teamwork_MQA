@@ -81,3 +81,15 @@ if (!requireNamespace("formattable", quietly = TRUE)) {
   install.packages("formattable")
 }
 library(formattable)
+
+# Biblioteca utilizada para testes de modelos de regressão linear
+if (!requireNamespace("lmtest", quietly = TRUE)) {
+  install.packages("lmtest")
+}
+library(lmtest)
+
+# Biblioteca utilizada para padronização do dataset
+if (!requireNamespace("tidyr", quietly = TRUE)) {
+  install.packages("tidyr")
+}
+library(tidyr)

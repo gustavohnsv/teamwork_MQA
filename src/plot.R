@@ -9,7 +9,7 @@ ggplot(wines, aes(x = volatile.acidity, y = chlorides)) +
   geom_smooth(method = "lm", se = FALSE)
 
 # Mapa de calor para cada par de colunas das colunas de vinho
-wines_cor_matrix <- cor(wines_numeric, use = "complete.obs")
+wines_cor_matrix <- cor(wines_sample, use = "complete.obs")
 pheatmap(wines_cor_matrix,
          display_numbers = TRUE,
          number_color = "#000000",
@@ -17,6 +17,18 @@ pheatmap(wines_cor_matrix,
 rm(wines_cor_matrix)
 
 # Gráficos de dispersão comparando cada variável com um densidade (precisa de atenção)
-png("linearmultipleregression1", width = 1000, height = 1000)
-avPlots(lm(formula = density ~ residual.sugar+alcohol+fixed.acidity+chlorides+is.red , data = wines_sample))
-dev.off()
+avPlots(lm(formula = density ~ residual.sugar + fixed.acidity + alcohol + chlorides + is.red, data = wines_sample))
+
+# Aplicando a padronização a cada coluna do dataframe
+wines_standardized <- as.data.frame(lapply(wines_sample, standardize_z_score))
+
+# Verificando os boxplots após padronização
+wines_long_z_score <- pivot_longer(wines_standardized, cols = everything(), 
+                                   names_to = "Variable", values_to = "Value")
+
+ggplot(wines_long_z_score, aes(x = Variable, y = Value)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(title = "Boxplots Padronizados (Z-score)",
+       x = "Variáveis",
+       y = "Valores")
