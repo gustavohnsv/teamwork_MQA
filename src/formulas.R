@@ -126,4 +126,8 @@ create_freq_tables <- function(column) {
   return(freq_tables)
 }
 
-
+# Função para exibir coeficiente de determinação na regressão linear simples
+simple_linear_regression_sqr_r <- function(y,x){
+  model <- lm(y~x)
+  return(summary(model)$r.square)
+}

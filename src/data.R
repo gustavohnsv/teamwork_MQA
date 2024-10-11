@@ -16,7 +16,7 @@ colnames(wines)[13] <- "is.red"
 wines <- wines %>%
   mutate(is.red = ifelse(is.red == "red", 1, 0))
 
-# Sortea 5000 observações para compor uma "amostra da amostra"
+# Sorteia 5000 observações para compor uma "amostra da amostra"
 wines_sample <- wines[sample(nrow(wines), size = 5000, replace = FALSE), ]
 
 # Cria um subset apenas com as colunas que são númericas
@@ -50,18 +50,3 @@ for (i in 1:wines_numeric_cols) {
 # Remove as variáveis temporárias para o loop
 rm(i, j, wines_numeric_cols, corr_test_result)
 
-#Tabela de distribuição de frequências para densidade
-density_freq_tables <- create_freq_tables(wines_sample$density)
-formattable(density_freq_tables)
-
-#Tabela de distribuição de frequências para álcool
-alcohol_freq_tables <- create_freq_tables(wines_sample$alcohol)
-
-#Tabela de distribuição de frequências para açúcar residual
-residual_sugar_freq_tables <- create_freq_tables(wines_sample$residual.sugar)
-
-#Tabela de distribuição de frequências para acidez fixa
-fixed_acidity_freq_tables <- create_freq_tables(wines_sample$fixed.acidity)
-
-#Tabela de distribuição de frequências para cloretos
-chlorides_freq_tables <- create_freq_tables(wines_sample$chlorides)
