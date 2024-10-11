@@ -18,5 +18,5 @@ rm(wines_cor_matrix)
 
 # Gráficos de dispersão comparando cada variável com um densidade (precisa de atenção)
 png("linearmultipleregression1", width = 1000, height = 1000)
-avPlots(lm(formula = density ~ residual.sugar+alcohol+fixed.acidity+chlorides+is.red , data = wines))
+avPlots(lm(formula = density ~ residual.sugar+alcohol+fixed.acidity+chlorides+is.red , data = wines_sample))
 dev.off()

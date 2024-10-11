@@ -27,6 +27,18 @@ test_Corr <- function(var1, var2) {
   }
 }
 
+# Aplica um modelo de regressão linear múltipla e aplica o processo de stepwise para refinar o modelo
+test_MultipleCorrelation <- function(data, y, ...) {
+  response <- enquo(y)
+  predictors <- quos(...)
+  response_name <- quo_name(response)
+  predictors_names <- sapply(predictors, quo_name)
+  formula <- reformulate(termlabels = predictors_names, response = response_name)
+  model <- lm(formula = formula, data = data)
+  stepwise_model <- step(model, direction = "both", trace = TRUE)
+  return(summary(stepwise_model))
+}
+
 # Realiza o teste de Shapiro-Wilk para garantir se uma variável númerica segue uma curva normal 
 test_ShapiroWilk <- function(data) {
   if (is.numeric(data)) {
@@ -65,12 +77,6 @@ testDataframe_AndersonDarling <- function(data) {
       print(ad.test(data[, j]))
     }
   }
-}
-
-test_MultipleCorrelation <- function(data, y, ...) {
-  predictors <- quos(...)
-  formula <- reformulate(termlabels = sapply(predictors, quo_name), response = y)
-  summary(lm(formula = formula, data = data))
 }
 
 # Função para calcular a moda

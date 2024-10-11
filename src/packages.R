@@ -1,8 +1,14 @@
-# Biblioteca com algumas funções úteis do RStudio
+# Biblioteca com algumas funções úteis de rstudioapi
 if (!requireNamespace("rstudioapi", quietly = TRUE)) {
   install.packages("rstudioapi")
 }
 library(rstudioapi)
+
+# Biblioteca com algumas funções úteis de rlang
+if (!requireNamespace("rlang", quietly = TRUE)) {
+  install.packages("rlang")
+}
+library(rlang)
 
 # Biblioteca para exibição de gráficos
 if (!requireNamespace("ggplot2", quietly = TRUE)) {
@@ -69,7 +75,6 @@ if (!requireNamespace("nortest", quietly = TRUE)) {
   install.packages("nortest")
 }
 library(nortest)
-
 
 # Biblioteca utilizada para formatação das tabelas de frequência
 if (!requireNamespace("formattable", quietly = TRUE)) {
