@@ -11,8 +11,10 @@ wines <- na.omit(wines)
 # Diz que a coluna "colour" deve ser tratada como um fator
 # wines$colour <- as.factor(wines$colour)
 
+# Renomeia a coluna 'colour' para 'is.red'
 colnames(wines)[13] <- "is.red"
 
+# Substitui a cor por números, sendo 1 para tinto e 0 para branco
 wines <- wines %>%
   mutate(is.red = ifelse(is.red == "red", 1, 0))
 
