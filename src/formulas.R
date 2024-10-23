@@ -134,5 +134,34 @@ simple_linear_regression_sqr_r <- function(y,x){
 
 # Padronização (Z-score)
 standardize_z_score <- function(x) {
-  return((x - mean(x)) / sd(x))
+  if(is.numeric(x)) {
+    return((x - mean(x)) / sd(x))
+  } else {
+    return(x)
+  }
+}
+
+format_odds_ratios <- function(results_df) {
+  # Verifica se a estrutura do data frame é a esperada
+  if (!all(c("OR", "2.5 %", "97.5 %", "p") %in% names(results_df))) {
+    stop("O data frame deve conter as colunas: 'OR', '2.5 %', '97.5 %', 'p'")
+  }
+  
+  # Loop sobre as linhas do data frame
+  for (i in 1:nrow(results_df)) {
+    or <- results_df$OR[i]
+    lower_ci <- results_df$`2.5 %`[i]
+    upper_ci <- results_df$`97.5 %`[i]
+    p_value <- results_df$p[i]
+    
+    # Formata os valores
+    or_percentage <- sprintf("%.2f%%", (or - 1) * 100)  # (OR - 1) para porcentagem
+    lower_ci_percentage <- sprintf("%.2f%%", (lower_ci - 1) * 100)
+    upper_ci_percentage <- sprintf("%.2f%%", (upper_ci - 1) * 100)
+    p_value_formatted <- format(p_value, scientific = FALSE)
+    
+    # Exibe os resultados formatados
+    cat(sprintf("OR: %s (IC: [%s, %s]) - p: %s\n", 
+                or_percentage, lower_ci_percentage, upper_ci_percentage, p_value_formatted))
+  }
 }

@@ -8,15 +8,15 @@ wines <- rbind(white_wines, red_wines)
 # Retira possíveis observações com campos NA
 wines <- na.omit(wines)
 
-# Diz que a coluna "colour" deve ser tratada como um fator
-# wines$colour <- as.factor(wines$colour)
-
 # Renomeia a coluna 'colour' para 'is.red'
 colnames(wines)[13] <- "is.red"
 
 # Substitui a cor por números, sendo 1 para tinto e 0 para branco
 wines <- wines %>%
   mutate(is.red = ifelse(is.red == "red", 1, 0))
+
+# Converte o valor númerico para um fator
+wines$is.red <- as.factor(wines$is.red)
 
 # Sorteia 5000 observações para compor uma "amostra da amostra"
 wines_sample <- wines[sample(nrow(wines), size = 5000, replace = FALSE), ]
@@ -51,3 +51,24 @@ for (i in 1:wines_numeric_cols) {
 
 # Remove as variáveis temporárias para o loop
 rm(i, j, wines_numeric_cols, corr_test_result)
+
+# Preparação das variáveis para os modelos de regressão de Ridge e Lasso
+x <- model.matrix(is.red ~ ., data = wines_sample)[, -1]
+y <- wines_sample$is.red
+
+# Modelos de regressão de Ridge e de Lasso
+ridge_model <- cv.glmnet(x, y, family = "binomial", alpha = 0) # Penaliza o modelo de maneira mais suave
+lasso_model <- cv.glmnet(x, y, family = "binomial", alpha = 1) # Penaliza o modelo drasticamente
+
+# Modelo de regressão logística com todas as variáveis do modelo
+logistic_model <- glm(is.red ~ ., data = wines_standardized, family = binomial(link = "logit"))
+
+# Modelo de regressão logística após a etapa de Stepwise, que mantém as variáveis mais significativas
+stepwise_logistic_model <- step(logistic_model, direction = "both", k = log(nrow(wines_sample)), trace = TRUE)
+
+# Razão de chances para o modelo que passou pelo processo de Stepwise
+OR <- odds.ratio(stepwise_logistic_model)
+
+# Visualização dos gráficos de probabilidade para cada uma das variáveis para o modelo que passou pelo processo de Stepwise
+marginalModelPlots(stepwise_logistic_model)
+

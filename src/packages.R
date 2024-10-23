@@ -93,3 +93,21 @@ if (!requireNamespace("tidyr", quietly = TRUE)) {
   install.packages("tidyr")
 }
 library(tidyr)
+
+# Biblioteca utilizada para obter razão de chances para modelos de regressão logística
+if (!requireNamespace("questionr", quietly = TRUE)) {
+  install.packages("questionr")
+}
+library(questionr)
+
+# Biblioteca utilizada para regularização de modelos
+if (!requireNamespace("glmnet", quietly = TRUE)) {
+  install.packages("glmnet")
+}
+library(glmnet)
+
+# Biblioteca utilizada para diagnóstico de modelos
+if (!requireNamespace("InformationValue", quietly = TRUE)) {
+  install.packages("InformationValue")
+}
+library(InformationValue)
