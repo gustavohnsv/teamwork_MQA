@@ -19,6 +19,17 @@ summary(model)
 
 summary(stdres(model)) # Entre -3 e +3 
 
+# Representação da equação final
+modelo <- glm(wines_sample$is.red ~ wines_sample$alcohol + wines_sample$residual.sugar + wines_sample$citric.acid, family = binomial)
+
+coeficientes <- coef(modelo)
+intercepto <- coeficientes[1]
+slope <- coeficientes[2]
+slope2 <- coeficientes[3]
+slope3 <- coeficientes[4]
+# Exibindo a equação da regressão logística
+cat("Log-odds do evento (log(p / (1 - p))): =", intercepto, "+", slope, "* X_1 +", slope2, "* X_2 +", slope3,"* X_3")
+
 ## 4. Ausência de multicolinearidade
 #item 6H parte 3
 ### Variáveis independentes não podem ter r> 0.9
