@@ -68,6 +68,7 @@ library(car)
 if (!requireNamespace("FSA", quietly = TRUE)) {
   install.packages("FSA")
 }
+
 library(FSA)
 
 # Biblioteca utilizada para aplicação do teste de normalidade de Anderson-Darling
@@ -106,8 +107,8 @@ if (!requireNamespace("glmnet", quietly = TRUE)) {
 }
 library(glmnet)
 
-# Biblioteca utilizada para diagnóstico de modelos
-if (!requireNamespace("InformationValue", quietly = TRUE)) {
-  install.packages("InformationValue")
+# Biblioteca utilizada para
+if (!requireNamespace("pscl", quietly = TRUE)) {
+  install.packages("pscl")
 }
-library(InformationValue)
+library(pscl)

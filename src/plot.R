@@ -11,8 +11,8 @@ plot_model <- test_MultipleCorrelation(wines_sample, density, residual.sugar, fi
 avPlots(plot_model)
 rm(plot_model)
 
-# Aplicando a padronização a cada coluna do dataframe
-wines_standardized <- as.data.frame(lapply(wines_sample, standardize_z_score))
+# Transforma uma coluna fator em uma coluna númerica
+wines_standardized$is.red <- as.numeric(wines_standardized$is.red)
 
 # Verificando os boxplots após padronização
 wines_long_z_score <- pivot_longer(wines_standardized, cols = everything(), 
@@ -25,6 +25,9 @@ ggplot(wines_long_z_score, aes(x = Variable, y = Value)) +
   labs(title = "Boxplots Padronizados (Z-score)",
        x = "Variáveis",
        y = "Valores")
+
+# Transforma uma coluna numérica em uma coluna fator
+wines_standardized$is.red <- as.factor(wines_standardized$is.red)
 
 # Histograma com uma curva de densidade para a variável density
 ggplot(wines_standardized, aes(x = density)) +

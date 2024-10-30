@@ -21,6 +21,9 @@ wines$is.red <- as.factor(wines$is.red)
 # Sorteia 5000 observações para compor uma "amostra da amostra"
 wines_sample <- wines[sample(nrow(wines), size = 5000, replace = FALSE), ]
 
+# Aplicando a padronização a cada coluna do dataframe
+wines_standardized <- as.data.frame(lapply(wines_sample, standardize_z_score))
+
 # Cria um subset apenas com as colunas que são númericas
 wines_numeric <- wines[, sapply(wines, is.numeric)]
 
@@ -52,23 +55,44 @@ for (i in 1:wines_numeric_cols) {
 # Remove as variáveis temporárias para o loop
 rm(i, j, wines_numeric_cols, corr_test_result)
 
+## Regressão Logística
+
 # Preparação das variáveis para os modelos de regressão de Ridge e Lasso
-x <- model.matrix(is.red ~ ., data = wines_sample)[, -1]
-y <- wines_sample$is.red
+# x <- model.matrix(is.red ~ ., data = wines_sample)[, -1]
+# y <- as.numeric(wines_sample$is.red)
 
 # Modelos de regressão de Ridge e de Lasso
-ridge_model <- cv.glmnet(x, y, family = "binomial", alpha = 0) # Penaliza o modelo de maneira mais suave
-lasso_model <- cv.glmnet(x, y, family = "binomial", alpha = 1) # Penaliza o modelo drasticamente
+# ridge_model <- cv.glmnet(x, y, family = "binomial", alpha = 0) # Penaliza o modelo de maneira mais suave
+# lasso_model <- cv.glmnet(x, y, family = "binomial", alpha = 1) # Penaliza o modelo drasticamente
 
 # Modelo de regressão logística com todas as variáveis do modelo
-logistic_model <- glm(is.red ~ ., data = wines_standardized, family = binomial(link = "logit"))
+# A variável 'density' foi removida pois apresentava um valor VIF muito alto (~10)
+logistic_model <- glm(is.red ~ . - density, data = wines_standardized, family = binomial(link = "logit"))
 
 # Modelo de regressão logística após a etapa de Stepwise, que mantém as variáveis mais significativas
 stepwise_logistic_model <- step(logistic_model, direction = "both", k = log(nrow(wines_sample)), trace = TRUE)
 
+# Razão de chances para o modelo que não passou por refinamento
+default_OR <- odds.ratio(logistic_model)
+
 # Razão de chances para o modelo que passou pelo processo de Stepwise
-OR <- odds.ratio(stepwise_logistic_model)
+stepwise_OR <- odds.ratio(stepwise_logistic_model)
+
+# Visualização dos gráficos de probabilidade para cada uma das variáveis para o modelo sem refinamento
+marginalModelPlots(logistic_model)
 
 # Visualização dos gráficos de probabilidade para cada uma das variáveis para o modelo que passou pelo processo de Stepwise
 marginalModelPlots(stepwise_logistic_model)
 
+# Obtenha as probabilidades previstas
+probabilidades <- predict(logistic_model, type = "response")
+
+# Defina um limiar (threshold) para a classificação
+limiar <- 0.5  # Este valor pode ser ajustado com base nas necessidades do seu problema
+previsoes <- ifelse(probabilidades > limiar, 1, 0)  # 1 para positivo, 0 para negativo
+
+# Crie a matriz de confusão
+matriz_confusao <- table(Real = wines_sample$is.red, Previsto = previsoes)
+
+# Visualize a matriz de confusão
+print(matriz_confusao)
