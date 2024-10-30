@@ -117,3 +117,15 @@ if (!requireNamespace("MASS", quietly = TRUE)) {
   install.packages("MASS")
 }
 library(MASS)
+
+# Biblioteca utilizada para Pseudo-R2
+if (!requireNamespace("DescTools", quietly = TRUE)) {
+  install.packages("DescTools")
+}
+library(DescTools)
+
+library(# Biblioteca utilizada para VIF
+  if (!requireNamespace("regclass", quietly = TRUE)) {
+    install.packages("regclass")
+  }
+  library(regclass))

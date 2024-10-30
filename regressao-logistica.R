@@ -22,8 +22,9 @@ summary(stdres(model)) # Entre -3 e +3
 ### Variáveis independentes não podem ter r> 0.9
 cor(wines_sample$alcohol, wines_sample$residual.sugar,
     method = c("pearson")) # não pode ter r>0.9
-#pairs.panels(wines_sample) # não pode ter r>0.9
-#vif(model) # não pode ter VIF>10
+
+# From regclass package
+vif(model) # não pode ter VIF>10
 
 # Análise do modelo
 
@@ -36,4 +37,6 @@ exp(cbind(OR = coef(model), confint(model)))
 
 # Pseudo-R2
 
-pR2(model)["Nagelkerke"]
+# From DescTools package
+pseudoR2(model, which ="Nagelkerke")
+
