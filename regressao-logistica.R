@@ -10,21 +10,23 @@ levels(wines_sample$is.red)
 ## 2. Independência das observações (sem medidas repetidas)
 
 # Obs: rever variáveis independentes
-model <- glm(wines_sample$is.red ~ wines_sample$alcohol + wines_sample$residual.sugar,
+model <- glm(wines_sample$is.red ~ wines_sample$alcohol + wines_sample$residual.sugar + wines_sample$citric.acid,
              family = binomial(link = 'logit'), data = wines_sample)
+#item 6A
 
+summary(model)
 ## 3. Ausência de outliers/ pontos de alavancagem
 
 summary(stdres(model)) # Entre -3 e +3 
 
 ## 4. Ausência de multicolinearidade
-
+#item 6H parte 3
 ### Variáveis independentes não podem ter r> 0.9
 cor(wines_sample$alcohol, wines_sample$residual.sugar,
     method = c("pearson")) # não pode ter r>0.9
 
 # From regclass package
-vif(model) # não pode ter VIF>10
+#vif(model) # não pode ter VIF>10
 
 # Análise do modelo
 
@@ -32,11 +34,14 @@ vif(model) # não pode ter VIF>10
 summary(model)
 
 ## Obtenção das razões  de chance com IC 95% (log-likelihood)
-
+# item 6D
 exp(cbind(OR = coef(model), confint(model)))
 
 # Pseudo-R2
-
+# item 6E
 # From DescTools package
-pseudoR2(model, which ="Nagelkerke")
+#pseudoR2(model, which ="Nagelkerke")
 
+## Teste de autocorrelação (Durbin-Watson)
+# item 6H parte 2
+dwtest(model)

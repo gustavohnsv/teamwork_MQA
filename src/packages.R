@@ -124,8 +124,14 @@ if (!requireNamespace("DescTools", quietly = TRUE)) {
 }
 library(DescTools)
 
-library(# Biblioteca utilizada para VIF
+# Biblioteca utilizada para VIF
   if (!requireNamespace("regclass", quietly = TRUE)) {
     install.packages("regclass")
   }
-  library(regclass))
+  library(regclass)
+
+# Biblioteca utilizada para teste de autocorrelação
+if (!requireNamespace("lmtest", quietly = TRUE)) {
+  install.packages("lmtest")
+}
+library(lmtest)
