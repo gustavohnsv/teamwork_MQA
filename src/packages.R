@@ -111,3 +111,9 @@ if (!requireNamespace("InformationValue", quietly = TRUE)) {
   install.packages("InformationValue")
 }
 library(InformationValue)
+
+# Biblioteca utilizada para resíduos padronizados (stdres)
+if (!requireNamespace("MASS", quietly = TRUE)) {
+  install.packages("MASS")
+}
+library(MASS)
