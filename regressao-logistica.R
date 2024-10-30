@@ -64,3 +64,12 @@ dwtest(model)
 # log-likelihood do modelo
 #item 6E
 print(logLik(model))
+
+# Tendência do resíduo
+# item 6H parte 1
+
+## resíduos deviannce e valores ajustados
+residuals_deviance <- residuals(model, type='deviance')
+
+qqnorm(residuals_deviance, main = "Q-Q Plot dos Resíduos Deviance")
+qqline(residuals_deviance, col = "red", lwd = 2)
