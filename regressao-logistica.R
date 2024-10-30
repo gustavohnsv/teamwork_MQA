@@ -34,7 +34,11 @@ cat("Log-odds do evento (log(p / (1 - p))): =", intercepto, "+", slope, "* X_1 +
 #item 6H parte 3
 ### Variáveis independentes não podem ter r> 0.9
 cor(wines_sample$alcohol, wines_sample$residual.sugar,
-    method = c("pearson")) # não pode ter r>0.9
+    method = c("pearson")) 
+cor(wines_sample$alcohol, wines_sample$citric.acid,
+    method = c("pearson"))
+cor(wines_sample$residual.sugar, wines_sample$citric.acid,
+    method = c("pearson"))
 
 # From regclass package
 #vif(model) # não pode ter VIF>10
@@ -56,3 +60,7 @@ exp(cbind(OR = coef(model), confint(model)))
 ## Teste de autocorrelação (Durbin-Watson)
 # item 6H parte 2
 dwtest(model)
+
+# log-likelihood do modelo
+#item 6E
+print(logLik(model))
