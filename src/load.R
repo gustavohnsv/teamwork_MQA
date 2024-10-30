@@ -1,10 +1,10 @@
 # Definindo o diretório de trabalho para a localização da pasta "teamwork_MQA"
-setwd(dirname(dirname(getActiveDocumentContext()$path)))
+#setwd(dirname(dirname(getActiveDocumentContext()$path)))
 
 # Caminho para os arquivos onde contém as variáveis que serão utilizadas
 file_path <- c("./data/winequality-red.csv", "./data/winequality-white.csv")
 
-if (!file.exists(file_path[1]) && !file.exists(file_path[2])) { # Verifica se existe um arquivo com o nome do "file_path"
+if (!file.exists(file_path[1]) || !file.exists(file_path[2])) { # Verifica se existe um arquivo com o nome do "file_path"
   message("File not found with ", file_path)
 } else {
   red_wines <- tryCatch({ # 1° Leitura dos dados brutos

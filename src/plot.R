@@ -1,5 +1,6 @@
 # Mapa de calor para cada par de colunas das colunas de vinho
-wines_cor_matrix <- cor(wines_sample, use = "complete.obs")
+wines_numeric <- wines_sample[, sapply(wines_sample, is.numeric)]
+wines_cor_matrix <- cor(wines_numeric, use = "complete.obs")
 pheatmap(wines_cor_matrix,
          display_numbers = TRUE,
          number_color = "#000000",
