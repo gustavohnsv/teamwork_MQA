@@ -165,3 +165,17 @@ format_odds_ratios <- function(results_df) {
                 or_percentage, lower_ci_percentage, upper_ci_percentage, p_value_formatted))
   }
 }
+
+confusion_matrix <- function(modelo, dados, limiar = 0.5) {
+  # Obtenha as probabilidades previstas
+  probabilidades <- predict(modelo, dados, type = "response")
+  
+  # Realiza a classificação com base no limiar definido
+  previsoes <- ifelse(probabilidades > limiar, 1, 0)  # 1 para positivo, 0 para negativo
+  
+  # Crie a matriz de confusão
+  matriz_confusao <- table(Real = dados$is.red, Previsto = previsoes)
+  
+  # Retorne a matriz de confusão
+  return(matriz_confusao)
+}
