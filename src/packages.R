@@ -17,10 +17,10 @@ if (!requireNamespace("ggplot2", quietly = TRUE)) {
 library(ggplot2)
 
 # Biblioteca para exibição de mapa de calor (Correlação)
-if (!requireNamespace("pheatmap", quietly = TRUE)) {
-  install.packages("pheatmap")
-}
-library(pheatmap)
+#if (!requireNamespace("pheatmap", quietly = TRUE)) {
+#  install.packages("pheatmap")
+#}
+#library(pheatmap)
 
 # Biblioteca para tratamento de dados, permite a manipulação de data frames e matrizes
 if (!requireNamespace("reshape", quietly = TRUE)) {
@@ -29,10 +29,10 @@ if (!requireNamespace("reshape", quietly = TRUE)) {
 library(reshape)
 
 # Biblioteca para exibição de gráficos de pizza
-if (!requireNamespace("plotrix", quietly = TRUE)) {
-  install.packages("plotrix")
-}
-library(plotrix)
+#if (!requireNamespace("plotrix", quietly = TRUE)) {
+#  install.packages("plotrix")
+#}
+#library(plotrix)
 
 # Biblioteca para funções de manipulação e transformação de dados
 if (!requireNamespace("dplyr", quietly = TRUE)) {
@@ -47,10 +47,10 @@ if (!requireNamespace("SparseM", quietly = TRUE)) {
 library(SparseM)
 
 # Biblioteca para regressão quantílica
-if (!requireNamespace("quantreg", quietly = TRUE)) {
-  install.packages("quantreg")
-}
-library(quantreg)
+#if (!requireNamespace("quantreg", quietly = TRUE)) {
+#  install.packages("quantreg")
+#}
+#library(quantreg)
 
 # Biblioteca que contém conjuntos de dados utilizados em exemplos da biblioteca 'car'
 if (!requireNamespace("carData", quietly = TRUE)) {
@@ -65,29 +65,29 @@ if (!requireNamespace("car", quietly = TRUE)) {
 library(car)
 
 # Biblioteca que contém uma variedade de métodos simples de avaliação de estoques pesqueiros.
-if (!requireNamespace("FSA", quietly = TRUE)) {
-  install.packages("FSA")
-}
+#if (!requireNamespace("FSA", quietly = TRUE)) {
+#  install.packages("FSA")
+#}
 
-library(FSA)
+#library(FSA)
 
 # Biblioteca utilizada para aplicação do teste de normalidade de Anderson-Darling
-if (!requireNamespace("nortest", quietly = TRUE)) {
-  install.packages("nortest")
-}
-library(nortest)
+#if (!requireNamespace("nortest", quietly = TRUE)) {
+#  install.packages("nortest")
+#}
+#library(nortest)
 
 # Biblioteca utilizada para formatação das tabelas de frequência
-if (!requireNamespace("formattable", quietly = TRUE)) {
-  install.packages("formattable")
-}
-library(formattable)
+#if (!requireNamespace("formattable", quietly = TRUE)) {
+#  install.packages("formattable")
+#}
+#library(formattable)
 
 # Biblioteca utilizada para testes de modelos de regressão linear
-if (!requireNamespace("lmtest", quietly = TRUE)) {
-  install.packages("lmtest")
-}
-library(lmtest)
+#if (!requireNamespace("lmtest", quietly = TRUE)) {
+#  install.packages("lmtest")
+#}
+#library(lmtest)
 
 # Biblioteca utilizada para padronização do dataset
 if (!requireNamespace("tidyr", quietly = TRUE)) {
@@ -96,19 +96,19 @@ if (!requireNamespace("tidyr", quietly = TRUE)) {
 library(tidyr)
 
 # Biblioteca utilizada para obter razão de chances para modelos de regressão logística
-if (!requireNamespace("questionr", quietly = TRUE)) {
-  install.packages("questionr")
-}
-library(questionr)
+#if (!requireNamespace("questionr", quietly = TRUE)) {
+#  install.packages("questionr")
+#}
+#library(questionr)
 
 # Biblioteca utilizada para regularização de modelos
-if (!requireNamespace("glmnet", quietly = TRUE)) {
-  install.packages("glmnet")
-}
-library(glmnet)
+#if (!requireNamespace("glmnet", quietly = TRUE)) {
+#  install.packages("glmnet")
+#}
+#library(glmnet)
 
-# Biblioteca utilizada para
-if (!requireNamespace("pscl", quietly = TRUE)) {
-  install.packages("pscl")
+# Biblioteca para métodos cotovelo e silhueta para escolha de número de clusters na análise não hierárquica
+if (!requireNamespace("NbClust", quietly = TRUE)) {
+  install.packages("NbClust")
 }
-library(pscl)
+library(NbClust)

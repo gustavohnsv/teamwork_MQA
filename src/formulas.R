@@ -181,3 +181,16 @@ calculate_aic_bic <- function(fit, X, y) {
   
   return(list(AIC = aic, BIC = bic))
 }
+
+# Função para remover outliers de um dataframe com base nos quartis
+no_outliers_df <- function(dataframe){
+  dataframe %>%
+    mutate(across(where(is.numeric), ~ {
+      Q1 <- quantile(.x, 0.25, na.rm = TRUE)
+      Q3 <- quantile(.x, 0.75, na.rm = TRUE)
+      IQR <- Q3 - Q1
+      lower <- Q1 - 1.5 * IQR
+      upper <- Q3 + 1.5 * IQR
+      ifelse(.x >= lower & .x <= upper, .x, NA) # Substitui outliers por NA
+    }))
+}
