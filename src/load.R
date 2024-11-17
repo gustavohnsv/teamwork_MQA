@@ -24,5 +24,9 @@ if (!file.exists(file_path[1]) || !file.exists(file_path[2])) { # Verifica se ex
   }
 }
 
+if (!is.null(red_wines) && !is.null(white_wines)) {
+  message("Datasets carregados com sucesso!")
+}
+
 # Remove o caminho para os arquivos (não será mais necessário) 
 rm(file_path)

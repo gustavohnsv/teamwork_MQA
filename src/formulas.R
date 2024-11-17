@@ -68,3 +68,9 @@ standardize_z_score <- function(x) {
     return(x)
   }
 }
+
+# Calcula a silhueta para avaliar a qualidade dos clusters
+calculate_silhouette <- function(data, clusters) {
+  library(cluster)
+  silhouette(clusters, dist(data))
+}

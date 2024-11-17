@@ -22,6 +22,10 @@ clusters_hier <- cutree(hc, k = 3)
 set.seed(123)
 kmeans_result <- kmeans(wines_standardized, centers = 3)
 
+# Salvar clusters nos dados padronizados
+wines_standardized$cluster_hier <- clusters_hier
+wines_standardized$cluster_kmeans <- kmeans_result$cluster
+
 # Visualização de clusters
 library(factoextra)
 fviz_cluster(kmeans_result, data = wines_standardized)

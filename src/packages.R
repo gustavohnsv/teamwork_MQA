@@ -16,6 +16,11 @@ if (!requireNamespace("ggplot2", quietly = TRUE)) {
 }
 library(ggplot2)
 
+if (!requireNamespace("car", quietly = TRUE)) {
+  install.packages("car")
+}
+library(car)
+
 # Biblioteca para exibição de mapa de calor (Correlação)
 if (!requireNamespace("pheatmap", quietly = TRUE)) {
   install.packages("pheatmap")
@@ -28,66 +33,12 @@ if (!requireNamespace("reshape", quietly = TRUE)) {
 }
 library(reshape)
 
-# Biblioteca para exibição de gráficos de pizza
-if (!requireNamespace("plotrix", quietly = TRUE)) {
-  install.packages("plotrix")
-}
-library(plotrix)
-
 # Biblioteca para funções de manipulação e transformação de dados
 if (!requireNamespace("dplyr", quietly = TRUE)) {
   install.packages("dplyr")
 }
 library(dplyr)
 
-# Biblioteca para manipulação de matrizes esparsas
-if (!requireNamespace("SparseM", quietly = TRUE)) {
-  install.packages("SparseM")
-}
-library(SparseM)
-
-# Biblioteca para regressão quantílica
-if (!requireNamespace("quantreg", quietly = TRUE)) {
-  install.packages("quantreg")
-}
-library(quantreg)
-
-# Biblioteca que contém conjuntos de dados utilizados em exemplos da biblioteca 'car'
-if (!requireNamespace("carData", quietly = TRUE)) {
-  install.packages("carData")
-}
-library(carData)
-
-# Biblioteca para análise de regressão, ANOVA, e outros métodos estatísticos
-if (!requireNamespace("car", quietly = TRUE)) {
-  install.packages("car")
-}
-library(car)
-
-# Biblioteca que contém uma variedade de métodos simples de avaliação de estoques pesqueiros.
-if (!requireNamespace("FSA", quietly = TRUE)) {
-  install.packages("FSA")
-}
-
-library(FSA)
-
-# Biblioteca utilizada para aplicação do teste de normalidade de Anderson-Darling
-if (!requireNamespace("nortest", quietly = TRUE)) {
-  install.packages("nortest")
-}
-library(nortest)
-
-# Biblioteca utilizada para formatação das tabelas de frequência
-if (!requireNamespace("formattable", quietly = TRUE)) {
-  install.packages("formattable")
-}
-library(formattable)
-
-# Biblioteca utilizada para testes de modelos de regressão linear
-if (!requireNamespace("lmtest", quietly = TRUE)) {
-  install.packages("lmtest")
-}
-library(lmtest)
 
 # Biblioteca utilizada para padronização do dataset
 if (!requireNamespace("tidyr", quietly = TRUE)) {
@@ -95,20 +46,10 @@ if (!requireNamespace("tidyr", quietly = TRUE)) {
 }
 library(tidyr)
 
-# Biblioteca utilizada para obter razão de chances para modelos de regressão logística
-if (!requireNamespace("questionr", quietly = TRUE)) {
-  install.packages("questionr")
-}
-library(questionr)
+#Biblioteca para a visualização de clusters intuitivamente (k-means e dendogramas)
+if (!requireNamespace("factoextra", quietly = TRUE)) install.packages("factoextra")
+library(factoextra)
 
-# Biblioteca utilizada para regularização de modelos
-if (!requireNamespace("glmnet", quietly = TRUE)) {
-  install.packages("glmnet")
-}
-library(glmnet)
-
-# Biblioteca utilizada para
-if (!requireNamespace("pscl", quietly = TRUE)) {
-  install.packages("pscl")
-}
-library(pscl)
+#Biblioteca para o carregamento e cálculo de infos relacionadas a clusters
+if (!requireNamespace("cluster", quietly = TRUE)) install.packages("cluster")
+library(cluster)
