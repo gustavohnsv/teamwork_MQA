@@ -112,3 +112,9 @@ if (!requireNamespace("NbClust", quietly = TRUE)) {
   install.packages("NbClust")
 }
 library(NbClust)
+
+# Biblioteca para criar gráficos avançados (não funciona ainda)
+#if (!requireNamespace("ggalt", quietly = TRUE)) {
+#  install.packages("ggalt")
+#}
+#library(ggalt)

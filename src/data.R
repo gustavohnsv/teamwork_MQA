@@ -1,22 +1,5 @@
-# Adiciona uma coluna indicando a cor do vinho de cada dataset
-white_wines$colour <- "white"
-red_wines$colour <- "red"
-
-# Combina os datasets para um único
-wines <- rbind(white_wines, red_wines)
-
-# Retira possíveis observações com campos NA
-wines <- na.omit(wines)
-
-# Renomeia a coluna 'colour' para 'is.red'
-colnames(wines)[13] <- "is.red"
-
-# Substitui a cor por números, sendo 1 para tinto e 0 para branco
-wines <- wines %>%
-  mutate(is.red = ifelse(is.red == "red", 1, 0))
-
 # Converte o valor númerico para um fator
-wines$is.red <- as.factor(wines$is.red)
+wines$colour <- as.factor(wines$colour)
 
 # Sorteia 5000 observações para compor uma "amostra da amostra"
 wines_sample <- wines[sample(nrow(wines), size = 500, replace = FALSE), ]
@@ -67,58 +50,61 @@ rm(i, j, wines_numeric_cols, corr_test_result)
 
 # Modelo de regressão logística com todas as variáveis do modelo
 # A variável 'density' foi removida pois apresentava um valor VIF muito alto (~10)
-logistic_model <- glm(is.red ~ . - density, data = wines_standardized, family = binomial(link = "logit"))
+# logistic_model <- glm(colour ~ . - density, data = wines_standardized, family = binomial(link = "logit"))
 
 # Modelo de regressão logística após a etapa de Stepwise, que mantém as variáveis mais significativas
-stepwise_logistic_model <- step(logistic_model, direction = "both", k = log(nrow(wines_sample)), trace = TRUE)
+# stepwise_logistic_model <- step(logistic_model, direction = "both", k = log(nrow(wines_sample)), trace = TRUE)
 
 # Razão de chances para o modelo que não passou por refinamento
-default_OR <- odds.ratio(logistic_model)
+# default_OR <- odds.ratio(logistic_model)
 
 # Razão de chances para o modelo que passou pelo processo de Stepwise
-stepwise_OR <- odds.ratio(stepwise_logistic_model)
+# stepwise_OR <- odds.ratio(stepwise_logistic_model)
 
 # Visualização dos gráficos de probabilidade para cada uma das variáveis para o modelo sem refinamento
-marginalModelPlots(logistic_model)
+# marginalModelPlots(logistic_model)
 
 # Visualização dos gráficos de probabilidade para cada uma das variáveis para o modelo que passou pelo processo de Stepwise
-marginalModelPlots(stepwise_logistic_model)
+# marginalModelPlots(stepwise_logistic_model)
 
 # Obtenha as probabilidades previstas
-probabilidades <- predict(logistic_model, type = "response")
+# probabilidades <- predict(logistic_model, type = "response")
 
 # Defina um limiar (threshold) para a classificação
-limiar <- 0.5  # Este valor pode ser ajustado com base nas necessidades do seu problema
-previsoes <- ifelse(probabilidades > limiar, 1, 0)  # 1 para positivo, 0 para negativo
+# limiar <- 0.5  # Este valor pode ser ajustado com base nas necessidades do seu problema
+# previsoes <- ifelse(probabilidades > limiar, 1, 0)  # 1 para positivo, 0 para negativo
 
 # Crie a matriz de confusão
-matriz_confusao <- table(Real = wines_sample$is.red, Previsto = previsoes)
+# matriz_confusao <- table(Real = wines_sample$colour, Previsto = previsoes)
 
 # Visualize a matriz de confusão
-print(matriz_confusao)
+# print(matriz_confusao)
 
-#Tabela de frequência para açúcar residual
+# Tabela de frequência para açúcar residual
 # Análise de Cluster: açúcar residual x densidade
 # Procedimento hierárquico
 sugar_density_df <- data.frame(
   sugar = wines_standardized$residual.sugar,
   acidity = wines_standardized$fixed.acidity
 )
+
 # Retirada de outliers por quantis (Apenas para procedimento não hierárquico)
 filtered_sugar_density_df <- na.omit(no_outliers_df(sugar_density_df))
 
+# Distância euclidiana
 euclidian_dist <- dist(filtered_sugar_density_df)
 
 # Agrupamento hierárquico aglomerativo por single linkage
 hierarchical_groups <- hclust(euclidian_dist, method = "single")
 
 # Visualizar o dendrograma
-plot(hierarchical_groups, main = "Dendrograma - Single Linkage", labels = FALSE,sub = "", xlab = "")
+plot(hierarchical_groups, main = "Dendrograma - Single Linkage", labels = FALSE, sub = "", xlab = "")
 
 # Dividindo o dendograma em 4 clusters e desenhando os retângulos
 rect.hclust(hierarchical_groups, k = 3, border = "green")
+
 # Procedimento não hierárquico
-#Método da silhueta para encontrar k ideal
+# Método da silhueta para encontrar k ideal
 nbclust_wss <- NbClust(filtered_sugar_density_df, distance = "euclidean", min.nc = 2, max.nc = 10, method = "kmeans", index = "silhouette")
 print(nbclust_wss$Best.nc)
 
@@ -139,6 +125,42 @@ non_hierarchical_cluster_data <- data.frame(filtered_sugar_density_df, Cluster =
 ggplot(non_hierarchical_cluster_data, aes(x = sugar, y = acidity, color = Cluster)) +
   geom_point() +
   theme_minimal()
+
+# Método do cotovelo para encontrar k ideal
+
+wss_values <- numeric(length(k_values))
+k_values <- 1:10
+
+for (k in k_values) {
+  kmeans_result <- kmeans(filtered_sugar_density_df, centers = k, nstart = 25, iter.max = 100)
+  wss_values[k] <- kmeans_result$tot.withinss
+}
+
+elbow_plot <- data.frame(k = k_values, wss = wss_values)
+ggplot(elbow_plot, aes(x = k, y = wss)) +
+  geom_line(color = "blue", size = 1) +
+  geom_point(color = "red", size = 2) +
+  theme_minimal() +
+  labs(title = "Método do Cotovelo",
+       x = "Número de Clusters (k)",
+       y = "Soma dos Quadrados Intra-Cluster (WSS)") +
+  geom_vline(xintercept = which.min(diff(diff(wss_values))), 
+             linetype = "dashed", color = "darkgreen")
+
+elbow_k <- 7
+
+elbow_kmeans_result <- kmeans(filtered_sugar_density_df, centers = elbow_k, nstart = 25)
+
+elbow_clustered_data <- data.frame(filtered_sugar_density_df, Cluster = as.factor(elbow_kmeans_result$cluster))
+
+ggplot(elbow_clustered_data, aes(x = sugar, y = acidity, color = Cluster)) +
+  geom_point(size = 3) +
+  theme_minimal() +
+  labs(title = paste("Clusters Identificados com K =", elbow_k),
+       x = "Açúcar Residual",
+       y = "Acidez Fixada",
+       color = "Cluster") +
+  scale_color_manual(values = c("red", "blue", "green", "yellow", "pink", "purple", "gray", "magenta"))
 
 # Exemplo análise de Cluster
 # Data Frame
