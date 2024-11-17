@@ -19,7 +19,7 @@ wines <- wines %>%
 wines$is.red <- as.factor(wines$is.red)
 
 # Sorteia 5000 observações para compor uma "amostra da amostra"
-wines_sample <- wines[sample(nrow(wines), size = 5000, replace = FALSE), ]
+wines_sample <- wines[sample(nrow(wines), size = 500, replace = FALSE), ]
 
 # Aplicando a padronização a cada coluna do dataframe
 wines_standardized <- as.data.frame(lapply(wines_sample, standardize_z_score))
@@ -97,30 +97,32 @@ matriz_confusao <- table(Real = wines_sample$is.red, Previsto = previsoes)
 # Visualize a matriz de confusão
 print(matriz_confusao)
 
-#Tabel de frequência para açúcar residual
+#Tabela de frequência para açúcar residual
 # Análise de Cluster: açúcar residual x densidade
 # Procedimento hierárquico
-# Distância Euclidiana entre cada objeto 
 sugar_density_df <- data.frame(
   sugar = wines_standardized$residual.sugar,
-  density = wines_standardized$density
+  acidity = wines_standardized$fixed.acidity
 )
 # Retirada de outliers por quantis (Apenas para procedimento não hierárquico)
 filtered_sugar_density_df <- na.omit(no_outliers_df(sugar_density_df))
-euclidian_dist <- dist(sugar_density_df)
+
+euclidian_dist <- dist(filtered_sugar_density_df)
 
 # Agrupamento hierárquico aglomerativo por single linkage
 hierarchical_groups <- hclust(euclidian_dist, method = "single")
 
 # Visualizar o dendrograma
-plot(hierarchical_groups, main = "Dendrograma - Single Linkage", sub = "", xlab = "")
+plot(hierarchical_groups, main = "Dendrograma - Single Linkage", labels = FALSE,sub = "", xlab = "")
 
+# Dividindo o dendograma em 4 clusters e desenhando os retângulos
+rect.hclust(hierarchical_groups, k = 3, border = "green")
 # Procedimento não hierárquico
 #Método da silhueta para encontrar k ideal
 nbclust_wss <- NbClust(filtered_sugar_density_df, distance = "euclidean", min.nc = 2, max.nc = 10, method = "kmeans", index = "silhouette")
 print(nbclust_wss$Best.nc)
 
-k <- 4 # Número ideal de clusters dado pelo método da silhueta
+k <- 3 # Número ideal de clusters dado pelo método da silhueta
 non_hierarchical_kmeans <- kmeans(filtered_sugar_density_df, centers = k, nstart = 25)
 
 # Clusters atribuídos
@@ -134,7 +136,7 @@ non_hierarchical_kmeans$centers
 
 # Visualização dos dados clusterizados
 non_hierarchical_cluster_data <- data.frame(filtered_sugar_density_df, Cluster = as.factor(non_hierarchical_kmeans$cluster))
-ggplot(non_hierarchical_cluster_data, aes(x = non_hierarchical_cluster_data$sugar, y = non_hierarchical_cluster_data$density, color = Cluster)) +
+ggplot(non_hierarchical_cluster_data, aes(x = sugar, y = acidity, color = Cluster)) +
   geom_point() +
   theme_minimal()
 
