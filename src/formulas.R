@@ -141,6 +141,14 @@ standardize_z_score <- function(x) {
   }
 }
 
+standardize_log <- function(x) {
+  if (is.numeric(x)) {
+    return(log(x+1))
+  } else {
+    return(x)
+  }
+}
+
 format_odds_ratios <- function(results_df) {
   if (!all(c("OR", "2.5 %", "97.5 %", "p") %in% names(results_df))) {
     stop("O data frame deve conter as colunas: 'OR', '2.5 %', '97.5 %', 'p'")

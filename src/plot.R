@@ -26,6 +26,26 @@ ggplot(wines_long_z_score, aes(x = Variable, y = Value)) +
        x = "Variáveis",
        y = "Valores")
 
+# Boxplot da varíavel residual.sugar padronizaada para a amostra de 500 elementos
+ggplot(wines_sample, aes(x = "", y = residual.sugar)) +
+  stat_boxplot(geom = "errorbar", width = 0.15) +
+  geom_boxplot(fill = "red", alpha = 0.5)
+
+# Boxplot da varíavel fixed.acidity padronizaada para a amostra de 500 elementos
+ggplot(wines_sample, aes(x = "", y = fixed.acidity)) +
+  stat_boxplot(geom = "errorbar", width = 0.15) +
+  geom_boxplot(fill = "red", alpha = 0.5)
+
+# Histograma com uma curva de densidade para a variável residual.sugar para a amostra de 500 elementos
+ggplot(wines_sample, aes(x = residual.sugar)) +
+  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "#FFFFFF", bins = 500) +
+  geom_density(lwd = 1.2, linetype = 2, colour = "#FF69B4", fill = "#FF69B4", alpha = 0.25)
+
+# Histograma com uma curva de densidade para a variável fixed.acidity para a amostra de 500 elementos
+ggplot(wines_sample, aes(x = fixed.acidity)) +
+  geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "#FFFFFF", bins = 500) +
+  geom_density(lwd = 1.2, linetype = 2, colour = "#FF69B4", fill = "#FF69B4", alpha = 0.25)
+
 # Transforma uma coluna numérica em uma coluna fator
 wines_standardized$is.red <- as.factor(wines_standardized$is.red)
 

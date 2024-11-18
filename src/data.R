@@ -98,17 +98,22 @@ euclidian_dist <- dist(filtered_sugar_density_df)
 hierarchical_groups <- hclust(euclidian_dist, method = "single")
 
 # Visualizar o dendrograma
-plot(hierarchical_groups, main = "Dendrograma - Single Linkage", labels = FALSE, sub = "", xlab = "")
+plot(hierarchical_groups, main = "Dendrograma - Single Linkage", labels = FALSE, sub = "", xlab = "", cex = 0.8, hang = -1)
 
 # Dividindo o dendograma em 4 clusters e desenhando os retângulos
 rect.hclust(hierarchical_groups, k = 3, border = "green")
 
 # Procedimento não hierárquico
+
+# Método usando índice de Calinski-Harabasz  (mais próximo do método do cotovelo e mais "confiável")
+nbclust_elbow <- NbClust(filtered_sugar_density_df, distance = "euclidean", min.nc = 2, max.nc = 10, method = "kmeans", index = "ch")
+print(nbclust_elbow$Best.nc)
+
 # Método da silhueta para encontrar k ideal
 nbclust_wss <- NbClust(filtered_sugar_density_df, distance = "euclidean", min.nc = 2, max.nc = 10, method = "kmeans", index = "silhouette")
 print(nbclust_wss$Best.nc)
 
-k <- 3 # Número ideal de clusters dado pelo método da silhueta
+k <- 2 # Número ideal de clusters dado pelo método da silhueta
 non_hierarchical_kmeans <- kmeans(filtered_sugar_density_df, centers = k, nstart = 25)
 
 # Clusters atribuídos
@@ -128,13 +133,17 @@ ggplot(non_hierarchical_cluster_data, aes(x = sugar, y = acidity, color = Cluste
 
 # Método do cotovelo para encontrar k ideal
 
+k_values <- 2:10
 wss_values <- numeric(length(k_values))
-k_values <- 1:10
 
-for (k in k_values) {
+for (i in seq_along(k_values)) {
+  k <- k_values[i]
   kmeans_result <- kmeans(filtered_sugar_density_df, centers = k, nstart = 25, iter.max = 100)
-  wss_values[k] <- kmeans_result$tot.withinss
+  wss_values[i] <- kmeans_result$tot.withinss
 }
+
+print(k_values)
+print(wss_values)
 
 elbow_plot <- data.frame(k = k_values, wss = wss_values)
 ggplot(elbow_plot, aes(x = k, y = wss)) +
@@ -144,23 +153,30 @@ ggplot(elbow_plot, aes(x = k, y = wss)) +
   labs(title = "Método do Cotovelo",
        x = "Número de Clusters (k)",
        y = "Soma dos Quadrados Intra-Cluster (WSS)") +
+  # diff() calcula as diferenças sucessivas entre os elementos consecutivos do vetor
+  # diff(diff()) calcula as diferenças das diferenças, ou seja, a aceleração da redução
   geom_vline(xintercept = which.min(diff(diff(wss_values))), 
              linetype = "dashed", color = "darkgreen")
 
-elbow_k <- 7
+# Valores obtidos (Silhueta: 2, CH: 6, Cotovelo: 6)
+elbow_k <- 6
 
 elbow_kmeans_result <- kmeans(filtered_sugar_density_df, centers = elbow_k, nstart = 25)
 
 elbow_clustered_data <- data.frame(filtered_sugar_density_df, Cluster = as.factor(elbow_kmeans_result$cluster))
 
+# Cálculo dos limites convexos de cada cluster (determina a geometria dos grupos)
+hulls <- elbow_clustered_data %>%
+  group_by(Cluster) %>%
+  slice(chull(sugar, acidity))
+
 ggplot(elbow_clustered_data, aes(x = sugar, y = acidity, color = Cluster)) +
   geom_point(size = 3) +
-  theme_minimal() +
+  geom_polygon(data = hulls, aes(fill = Cluster, group = Cluster), alpha = 0.2, color = "black") +
   labs(title = paste("Clusters Identificados com K =", elbow_k),
        x = "Açúcar Residual",
-       y = "Acidez Fixada",
-       color = "Cluster") +
-  scale_color_manual(values = c("red", "blue", "green", "yellow", "pink", "purple", "gray", "magenta"))
+       y = "Acidez Fixa",
+       color = "Cluster")
 
 # Exemplo análise de Cluster
 # Data Frame
