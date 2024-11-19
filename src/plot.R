@@ -6,6 +6,8 @@ sample_size <- floor(nrow(wines))  # Calcula 10% do número de linhas
 sample_indices <- sample(seq_len(nrow(wines)), size = sample_size)  # Seleciona os índices aleatórios
 wines_sampled <- wines[sample_indices, ]  # Cria o dataset amostrado
 
+library (ggplot2)
+
 # Selecionar as variáveis de interesse
 selected_data <- wines_sampled[, c("fixed.acidity", "residual.sugar")]
 
@@ -19,9 +21,21 @@ dist_matrix <- dist(selected_data_standardized, method = "euclidean")
 hc <- hclust(dist_matrix, method = "ward.D")
 
 # Plotar o dendrograma
-plot(hc, main = "Dendrograma - Clustering Hierárquico (Sem amostragem)", xlab = "", ylab = "Altura")
+plot(hc, main = "Dendrograma - Clustering Hierárquico (Sem amostragem)", xlab = "", ylab = "Altura", labels = FALSE)
 rect.hclust(hc, k = 3, border = c("red", "blue", "green"))  # Para destacar os clusters
+# Atribuir clusters aos dados amostrados
+clusters <- cutree(hc, k = 3)
+selected_data$cluster <- as.factor(clusters)
 
+# Plotar o dendrograma focando nas hierarquias mais baixas
+plot(hc, main = "Dendrograma - Clustering Hierárquico (Corte Inferior)",
+     xlab = "Observações (Álcool e Açúcar)", ylab = "Altura", labels = FALSE)
+rect.hclust(hc, k = 3, border = c("red", "blue", "green"))  # Para destacar os clusters
+# Adicionando uma legenda explicativa
+legend("topright", legend = c("Cluster 1", "Cluster 2", "Cluster 3"),
+       col = c("red", "blue", "green"), lty = 1, cex = 0.8)
+# Adicionando texto no gráfico
+text(x = 760, y = 1000, "Maior acidez fixa", col = "red")
 # Atribuir clusters aos dados amostrados
 clusters <- cutree(hc, k = 3)
 selected_data$cluster <- as.factor(clusters)
@@ -34,8 +48,8 @@ selected_data_standardized$cluster <- selected_data$cluster    # Adiciona os clu
 # Gráfico de dispersão com os valores normalizados
 ggplot(selected_data_standardized, aes(x = acidity, y = sugar, color = cluster)) +
   geom_point(size = 1) +  # Ajusta o tamanho dos pontos
-  labs(title = "Clusters (Normalizados): Acidity x Sugar",  # Ajusta o título
-       x = "Normalized Acidity", y = "Normalized Sugar",    # Ajusta os rótulos dos eixos
+  labs(title = "Clusters (Normalizados): Acidez x Açúcar",  # Ajusta o título
+       x = "Acidez Normalizada", y = "Açúcar Normalizado",    # Ajusta os rótulos dos eixos
        color = "Cluster") +                                 # Ajusta o título da legenda
   theme_minimal(base_size = 14) +                           # Tema minimalista com tamanho da fonte ajustado
   theme(
@@ -93,11 +107,14 @@ ggplot(selected_data_robust, aes(x = acidity, y = sugar, color = cluster)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-# Calculando TSS
+# Exclua a coluna cluster, caso tenha sido adicionada
+selected_data_standardized <- selected_data_standardized[, 1:2]
+
+# Recalcule o centroid_global
 centroid_global <- colMeans(selected_data_standardized)
 TSS <- sum(rowSums((selected_data_standardized - centroid_global)^2))
 
-# Calculando WSS (para clusters hierárquicos)
+# Continue com o cálculo
 WSS <- 0
 for (k in unique(clusters)) {
   cluster_points <- selected_data_standardized[clusters == k, ]
@@ -105,6 +122,6 @@ for (k in unique(clusters)) {
   WSS <- WSS + sum(rowSums((cluster_points - centroid_cluster)^2))
 }
 
-# Calculando R²
+# R² final
 R_squared <- 1 - (WSS / TSS)
 print(paste("R²:", round(R_squared, 4)))
