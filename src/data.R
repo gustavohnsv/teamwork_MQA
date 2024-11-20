@@ -92,13 +92,13 @@ sugar_density_df <- data.frame(
 filtered_sugar_density_df <- na.omit(no_outliers_df(sugar_density_df))
 
 # Distância euclidiana
-euclidian_dist <- dist(filtered_sugar_density_df)
+euclidian_dist <- dist(sugar_density_df)
 
-# Agrupamento hierárquico aglomerativo por single linkage
-hierarchical_groups <- hclust(euclidian_dist, method = "single")
+# Agrupamento hierárquico aglomerativo por Ward Method
+hierarchical_groups <- hclust(euclidian_dist, method = "ward.D2")
 
 # Visualizar o dendrograma
-plot(hierarchical_groups, main = "Dendrograma - Single Linkage", labels = FALSE, sub = "", xlab = "", cex = 0.8, hang = -1)
+plot(hierarchical_groups, main = "Dendrograma - Ward Method", labels = FALSE, sub = "", xlab = "", cex = 0.8, hang = -1)
 
 # Dividindo o dendograma em 4 clusters e desenhando os retângulos
 rect.hclust(hierarchical_groups, k = 3, border = "green")
@@ -133,18 +133,32 @@ ggplot(non_hierarchical_cluster_data, aes(x = sugar, y = acidity, color = Cluste
 
 # Método do cotovelo para encontrar k ideal
 
+# Valores de K variam entre 2 e 10, ou seja, de 2 a 10 clusters
 k_values <- 2:10
+
+# Vetor que armazenará a soma dos quadrados intra-clusters
 wss_values <- numeric(length(k_values))
 
+# Itera sobre os diferentes valores de K para calcular a soma dos quadrados intra-clusters
 for (i in seq_along(k_values)) {
+
+  # Seleciona o cluster atual
   k <- k_values[i]
+  
+  # Calcula o K-means para o número do iterador
   kmeans_result <- kmeans(filtered_sugar_density_df, centers = k, nstart = 25, iter.max = 100)
+  
+  # Armazena a soma total das distâncias quadradas intra-clusters parao número do iterador
   wss_values[i] <- kmeans_result$tot.withinss
 }
 
+# Exibe os K valores
 print(k_values)
+
+# Exibe as somas dos quadrados intra-clusters
 print(wss_values)
 
+# Gráfico de linha da mudança da soma das distâncias quadradas intra-clusters conforme o número de clusters
 elbow_plot <- data.frame(k = k_values, wss = wss_values)
 ggplot(elbow_plot, aes(x = k, y = wss)) +
   geom_line(color = "blue", size = 1) +
@@ -155,14 +169,16 @@ ggplot(elbow_plot, aes(x = k, y = wss)) +
        y = "Soma dos Quadrados Intra-Cluster (WSS)") +
   # diff() calcula as diferenças sucessivas entre os elementos consecutivos do vetor
   # diff(diff()) calcula as diferenças das diferenças, ou seja, a aceleração da redução
-  geom_vline(xintercept = which.min(diff(diff(wss_values))), 
+  geom_vline(xintercept = which.min(diff(diff(wss_values))) + 1, 
              linetype = "dashed", color = "darkgreen")
 
 # Valores obtidos (Silhueta: 2, CH: 6, Cotovelo: 6)
 elbow_k <- 6
 
+# Recalcula K-means com K fixado pelo elbow_k
 elbow_kmeans_result <- kmeans(filtered_sugar_density_df, centers = elbow_k, nstart = 25)
 
+# Armazena o resultado para exibiro gráfico
 elbow_clustered_data <- data.frame(filtered_sugar_density_df, Cluster = as.factor(elbow_kmeans_result$cluster))
 
 # Cálculo dos limites convexos de cada cluster (determina a geometria dos grupos)
@@ -170,6 +186,7 @@ hulls <- elbow_clustered_data %>%
   group_by(Cluster) %>%
   slice(chull(sugar, acidity))
 
+# Gráfico de dispersão de cada amostra em seus respectivos clusters
 ggplot(elbow_clustered_data, aes(x = sugar, y = acidity, color = Cluster)) +
   geom_point(size = 3) +
   geom_polygon(data = hulls, aes(fill = Cluster, group = Cluster), alpha = 0.2, color = "black") +
