@@ -100,8 +100,41 @@ hierarchical_groups <- hclust(euclidian_dist, method = "ward.D2")
 # Visualizar o dendrograma
 plot(hierarchical_groups, main = "Dendrograma - Ward Method", labels = FALSE, sub = "", xlab = "", cex = 0.8, hang = -1)
 
-# Dividindo o dendograma em 4 clusters e desenhando os retângulos
+# Dividindo o dendograma em 3 clusters e desenhando os retângulos
 rect.hclust(hierarchical_groups, k = 3, border = "green")
+
+# Mudando todas as colunas para númerico
+sugar_density_df <- sugar_density_df[, sapply(sugar_density_df, is.numeric)]
+
+# Dividindo em 3 clusters
+cluster_assignments <- cutree(hierarchical_groups, k = 3)
+
+# Reduzindo a dimensionalidade para 2D com PCA
+pca_result <- prcomp(sugar_density_df, scale. = TRUE)
+
+# Adicionando os clusters como uma coluna para facilitar a visualização
+plot_data <- data.frame(
+  PC1 = pca_result$x[, 1],
+  PC2 = pca_result$x[, 2],
+  Cluster = as.factor(cluster_assignments)
+)
+
+# Cálculo dos limites convexos de cada cluster (determina a geometria dos grupos)
+hulls <- plot_data %>%
+  group_by(Cluster) %>%
+  slice(chull(PC1, PC2))
+
+# Gráfico de dispersão de cada amostra em seus respectivos clusters
+ggplot(plot_data, aes(x = PC1, y = PC2, color = Cluster)) +
+  geom_point(size = 3) +  # Pontos
+  geom_polygon(data = hulls, aes(fill = Cluster, group = Cluster), 
+               alpha = 0.2, color = "black") +  # Contornos
+  labs(title = "Visualização de 3 Clusters após redução de dimensionalidade para 2D", 
+       x = "Componente Principal 1", 
+       y = "Componente Principal 2",
+       color = "Cluster",
+       fill = "Cluster") +
+  theme_minimal()
 
 # Procedimento não hierárquico
 
