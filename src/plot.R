@@ -17,6 +17,13 @@ selected_data_standardized <- scale(selected_data)
 # Construir a matriz de distância
 dist_matrix <- dist(selected_data_standardized, method = "euclidean")
 
+# Visualização dos fatores
+ggplot(wines_standardized, aes(x = Factor1, y = Factor2, color = cluster_kmeans)) +
+  geom_point(size = 2) +
+  labs(title = "Visualização dos Fatores 1 e 2",
+       x = "Fator 1", y = "Fator 2", color = "Cluster") +
+  theme_minimal(base_size = 14)
+
 # Realizar o clustering hierárquico
 hc <- hclust(dist_matrix, method = "ward.D")
 
@@ -125,3 +132,4 @@ for (k in unique(clusters)) {
 # R² final
 R_squared <- 1 - (WSS / TSS)
 print(paste("R²:", round(R_squared, 4)))
+

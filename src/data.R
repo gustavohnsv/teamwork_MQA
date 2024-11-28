@@ -10,22 +10,24 @@ library(pheatmap)
 corr_matrix <- cor(wines_standardized, use = "complete.obs")
 pheatmap(corr_matrix, display_numbers = TRUE, fontsize_number = 8)
 
-# Método hierárquico
-dist_matrix <- dist(wines_standardized, method = "euclidean")
-hc <- hclust(dist_matrix, method = "ward.D")
-plot(hc, main = "Dendrograma - Cluster Hierárquico")
+library(psych)
 
-# Escolher número de clusters
-clusters_hier <- cutree(hc, k = 3)
+# Realizar a análise fatorial (definindo 3 fatores como exemplo)
+fa_result <- fa(r = corr_matrix, nfactors = 3, rotate = "varimax")
 
-# Método K-means
-set.seed(123)
-kmeans_result <- kmeans(wines_standardized, centers = 3)
+# Exibir os resultados da análise fatorial
+print(fa_result)
 
-# Salvar clusters nos dados padronizados
-wines_standardized$cluster_hier <- clusters_hier
-wines_standardized$cluster_kmeans <- kmeans_result$cluster
+# Scree Plot para avaliar o número adequado de fatores
+scree(corr_matrix)
 
-# Visualização de clusters
-library(factoextra)
-fviz_cluster(kmeans_result, data = wines_standardized)
+# Plotar os loadings fatoriais
+fa.diagram(fa_result)
+
+# Adicionar os scores fatoriais aos dados padronizados
+wines_standardized$Factor1 <- fa_result$scores[,1]
+wines_standardized$Factor2 <- fa_result$scores[,2]
+wines_standardized$Factor3 <- fa_result$scores[,3]
+
+# Determina quantos fatores serão usados como base na regra do autovalor maior que 1
+num_factors <- calculate_num_factors(wines_standardized)

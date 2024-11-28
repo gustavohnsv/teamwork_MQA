@@ -74,3 +74,12 @@ calculate_silhouette <- function(data, clusters) {
   library(cluster)
   silhouette(clusters, dist(data))
 }
+
+# Função para calcular o número ideal de fatores com base nos eigenvalues
+calculate_num_factors <- function(data) {
+  eigen_values <- eigen(cor(data))$values
+  plot(eigen_values, type = "b", main = "Scree Plot", xlab = "Fatores", ylab = "Autovalores")
+  
+  # Retorna o número de fatores com eigenvalue maior que 1
+  return(sum(eigen_values > 1))
+}

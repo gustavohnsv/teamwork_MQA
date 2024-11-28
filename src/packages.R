@@ -53,3 +53,15 @@ library(factoextra)
 #Biblioteca para o carregamento e cálculo de infos relacionadas a clusters
 if (!requireNamespace("cluster", quietly = TRUE)) install.packages("cluster")
 library(cluster)
+
+if (!requireNamespace("psych", quietly = TRUE)) {
+  install.packages("psych")
+}
+library(psych)
+
+if (!requireNamespace("GPArotation", quietly = TRUE)) {
+  install.packages("GPArotation")
+}
+library(GPArotation)
+
+if (!requireNamespace("psych", quietly = TRUE)) install.packages("psych")
