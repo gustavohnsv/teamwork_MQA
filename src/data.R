@@ -1,19 +1,12 @@
-# Combinar os datasets e remover valores ausentes
-wines <- rbind(white_wines, red_wines)
-wines <- na.omit(wines)
-
 # Padronizar as variáveis numéricas (Z-score)
-wines_standardized <- as.data.frame(lapply(wines[, sapply(wines, is.numeric)], standardize_z_score))
+wines_standardized <- as.data.frame(lapply(wines[, sapply(wines, is.numeric)], scale))
 
 # Criar uma matriz de correlação
-library(pheatmap)
 corr_matrix <- cor(wines_standardized, use = "complete.obs")
-pheatmap(corr_matrix, display_numbers = TRUE, fontsize_number = 8)
 
+# Realizar a análise fatorial com método tenBerge
 library(psych)
-
-# Realizar a análise fatorial (definindo 3 fatores como exemplo)
-fa_result <- fa(r = corr_matrix, nfactors = 3, rotate = "varimax")
+fa_result <- fa(r = corr_matrix, nfactors = 3, rotate = "varimax", scores = "tenBerge")
 
 # Exibir os resultados da análise fatorial
 print(fa_result)
@@ -24,10 +17,16 @@ scree(corr_matrix)
 # Plotar os loadings fatoriais
 fa.diagram(fa_result)
 
-# Adicionar os scores fatoriais aos dados padronizados
+# Adicionar os scores fatoriais ao dataframe padronizado
 wines_standardized$Factor1 <- fa_result$scores[,1]
 wines_standardized$Factor2 <- fa_result$scores[,2]
 wines_standardized$Factor3 <- fa_result$scores[,3]
 
-# Determina quantos fatores serão usados como base na regra do autovalor maior que 1
-num_factors <- calculate_num_factors(wines_standardized)
+# Verificar comunalidades
+print("Comunalidades:")
+print(fa_result$communality)
+
+# Determinar quantos fatores serão usados (autovalores > 1)
+eigenvalues <- eigen(corr_matrix)$values
+num_factors <- sum(eigenvalues > 1)
+print(paste("Número de fatores sugeridos:", num_factors))
