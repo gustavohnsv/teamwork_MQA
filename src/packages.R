@@ -108,13 +108,19 @@ library(tidyr)
 #library(glmnet)
 
 # Biblioteca para métodos cotovelo e silhueta para escolha de número de clusters na análise não hierárquica
-if (!requireNamespace("NbClust", quietly = TRUE)) {
-  install.packages("NbClust")
-}
-library(NbClust)
+#if (!requireNamespace("NbClust", quietly = TRUE)) {
+#  install.packages("NbClust")
+#}
+#library(NbClust)
 
 # Biblioteca para criar gráficos avançados (não funciona ainda)
 #if (!requireNamespace("ggalt", quietly = TRUE)) {
 #  install.packages("ggalt")
 #}
 #library(ggalt)
+
+# Biblioteca para cálculo do coeficiente KMO
+if (!requireNamespace("psych", quietly = TRUE)) {
+  install.packages("psych")
+}
+library(psych)
