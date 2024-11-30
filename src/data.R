@@ -58,6 +58,65 @@ kmo_method_white <- KMO(cor(wines_sample_numeric_white))
 print(kmo_method_white)
 
 # Teste de Barlett
+barlett_test_all <- cortest.bartlett(cor(wines_sample_numeric), n = nrow(wines_sample_numeric))
+barlett_test_red <- cortest.bartlett(cor(wines_sample_numeric_red), n = nrow(wines_sample_numeric_red))
+barlett_test_white <- cortest.bartlett(cor(wines_sample_numeric_white), n = nrow(wines_sample_numeric_white))
+
+print(barlett_test_all)
+print(barlett_test_red)
+print(barlett_test_white)
+
+# MSA
+print(kmo_method$MSAi)
+print(kmo_method_red$MSAi)
+print(kmo_method_white$MSAi)
+
+# Determinação do número de fatores
+# Critério de Kaiser
+kaiser_eigenvalues_all <- eigen(cor(wines_sample_numeric))$values
+print(kaiser_eigenvalues_all)
+factors_kaiser_all <- sum(kaiser_eigenvalues_all >1) # critério pro número de fatores
+print(factors_kaiser_all)
+
+kaiser_eigenvalues_red <- eigen(cor(wines_sample_numeric_red))$values
+print(kaiser_eigenvalues_red)
+factors_kaiser_red <- sum(kaiser_eigenvalues_red >1) # critério pro número de fatores
+print(factors_kaiser_red)
+
+kaiser_eigenvalues_white <- eigen(cor(wines_sample_numeric_white))$values
+print(kaiser_eigenvalues_white)
+factors_kaiser_white <- sum(kaiser_eigenvalues_white >1) # critério pro número de fatores
+print(factors_kaiser_white)
+
+# Scree Plot
+plot(kaiser_eigenvalues_all, type = "b", main = "Scree Plot", xlab = "Número de Fatores", ylab = "Autovalores")
+second_derivative_all <- diff(diff(kaiser_eigenvalues_all))
+elbow_all <- which.max(second_derivative_all) + 1
+lines(c(elbow_all,elbow_all), c(0, kaiser_eigenvalues_all[elbow_all]), col="green", lty =2, lwd =2 ) # Aponta número de fatores ideal
+
+plot(kaiser_eigenvalues_red, type = "b", main = "Scree Plot", xlab = "Número de Fatores", ylab = "Autovalores")
+second_derivative_red <- diff(diff(kaiser_eigenvalues_red))
+elbow_red <- which.max(second_derivative_red) + 1
+lines(c(elbow_red,elbow_red), c(0, kaiser_eigenvalues_red[elbow_red]), col="red", lty =2, lwd =2 ) # Aponta número de fatores ideal
+
+plot(kaiser_eigenvalues_white, type = "b", main = "Scree Plot", xlab = "Número de Fatores", ylab = "Autovalores")
+second_derivative_white <- diff(diff(kaiser_eigenvalues_white))
+elbow_white <- which.max(abs(second_derivative_white)) + 1
+lines(c(elbow_white,elbow_white), c(0, kaiser_eigenvalues_white[elbow_white]), col="blue", lty =2, lwd =2 ) # Aponta número de fatores ideal
+
+# Análise fatorial final
+factor_number_all <- factors_kaiser_all
+factorial_analysis_all <- fa(r = cor(wines_sample_numeric), nfactors = factor_number_all, rotate ="varimax", fm = "ml")
+print(factorial_analysis_all)
+
+factor_number_red <- factors_kaiser_red
+factorial_analysis_red <- fa(r = cor(wines_sample_numeric_red), nfactors = factor_number_red, rotate ="varimax", fm = "ml")
+print(factorial_analysis_red)
+
+factor_number_white <- factors_kaiser_white
+factorial_analysis_white <- fa(r = cor(wines_sample_numeric_white), nfactors = factor_number_white, rotate ="varimax", fm = "ml")
+print(factorial_analysis_white)
+
 
 
 ## Exemplo Análise Fatorial
@@ -89,7 +148,7 @@ print(factors_kaiser)
 # Scree Plot
 plot(kaiser_eigenvalues, type = "b", main = "Scree Plot", xlab = "Número de Fatores", ylab = "Autovalores")
 second_derivative <- diff(diff(kaiser_eigenvalues))
-elbow <- which.max(abs(second_derivative)) + 1
+elbow <- which.max(second_derivative) + 1
 
 lines(c(elbow,elbow), c(0, kaiser_eigenvalues[elbow]), col="red", lty =2, lwd =2 ) # Aponta número de fatores ideal
 
