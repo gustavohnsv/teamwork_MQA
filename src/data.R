@@ -117,21 +117,22 @@ factor_number_white <- factors_kaiser_white
 factorial_analysis_white <- fa(r = cor(wines_sample_numeric_white), nfactors = factor_number_white, rotate ="varimax", fm = "ml")
 print(factorial_analysis_white)
 
-
+data()
 
 ## Exemplo Análise Fatorial
-data("swiss")
-View(swiss)
+data("mtcars")
 # Matriz de correlação
-corr_matrix <- cor(swiss)
+data_subset <- mtcars[, -c(8,9)] 
+corr_matrix <- cor(data_subset)
 print(corr_matrix)
 
-# Cálculo KMO
+# Cálculo KMO e MSA
 kmo <- KMO(corr_matrix)
 print(kmo)
+print(kmo$MSAi)
 
 # Teste de Barlett
-barlett_test <- cortest.bartlett(cor(swiss), n = nrow(swiss))
+barlett_test <- cortest.bartlett(corr_matrix, n = nrow(data_subset))
 print(barlett_test)
 
 # Cálculo do MSA
