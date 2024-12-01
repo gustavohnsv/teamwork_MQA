@@ -4,6 +4,7 @@ test_Corr <- function(var1, var2) {
     return(cor(var1, var2, method = "pearson", use = "complete.obs"))
   } else {
     message("Insira colunas númericas!")
+    return(NA)
   }
 }
 

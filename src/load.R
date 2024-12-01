@@ -28,5 +28,16 @@ if (!is.null(red_wines) && !is.null(white_wines)) {
   message("Datasets carregados com sucesso!")
 }
 
+# Carregando os dados
+file_path_red <- "./data/winequality-red.csv"
+file_path_white <- "./data/winequality-white.csv"
+
+tryCatch({
+  wines_red <- load_wine_data(file_path_red)
+  wines_white <- load_wine_data(file_path_white)
+}, error = function(e) {
+  message("Erro ao carregar os arquivos: ", e$message)
+})
+
 # Remove o caminho para os arquivos (não será mais necessário) 
 rm(file_path)
