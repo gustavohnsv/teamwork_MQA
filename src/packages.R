@@ -130,3 +130,9 @@ if (!requireNamespace("stats", quietly = TRUE)) {
   install.packages("stats")
 }
 library(stats)
+
+# Biblioteca para visualização de matrizes de correlação
+if (!requireNamespace("corrplot", quietly = TRUE)) {
+  install.packages("corrplot")
+}
+library(corrplot)
