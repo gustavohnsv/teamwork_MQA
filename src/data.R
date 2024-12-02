@@ -10,11 +10,12 @@ wines_sample_white <- wines_white[sample(nrow(wines_white), size = 500, replace 
 wines_standardized <- as.data.frame(lapply(wines_sample, standardize_z_score))
 
 # Cria um subset apenas com as colunas que são númericas
-wines_numeric <- wines[, sapply(wines, is.numeric)]
 
 wines_sample_numeric <- wines_sample[, sapply(wines_sample, is.numeric)]
 wines_sample_numeric_red <- wines_sample_red[, sapply(wines_sample_red, is.numeric)]
 wines_sample_numeric_white <- wines_sample_white[, sapply(wines_sample_white, is.numeric), drop = FALSE]
+
+wines_sample_numeric_std <- wines_sample_white[, sapply(wines_standardized, is.numeric), drop = FALSE]
 
 # Obtem o número de colunas de "wines_numeric"
 wines_numeric_cols <- ncol(wines_numeric)
@@ -57,12 +58,85 @@ print(kmo_method_red)
 kmo_method_white <- KMO(cor(wines_sample_numeric_white))
 print(kmo_method_white)
 
+kmo_method_standardized <- KMO(cor(wines_sample_numeric_std))
+print(kmo_method_standardized)
+
+# Cálculo do KMO retirando as variáveis com um MSA < 0.5
+
+# Aplicar a função aos diferentes subconjuntos de dados
+kmo_method_after_filter <- KMO(cor(remove_low_msa(wines_sample_numeric)))
+print(kmo_method_after_filter)
+
+kmo_method_after_filter_red <- KMO(cor(remove_low_msa(wines_sample_numeric_red)))
+print(kmo_method_after_filter_red)
+
+kmo_method_after_filter_white <- KMO(cor(remove_low_msa(wines_sample_numeric_white)))
+print(kmo_method_after_filter_white)
+
+kmo_method_after_filter_std <- KMO(cor(remove_low_msa(wines_sample_numeric_std)))
+print(kmo_method_after_filter_std)
+
 # Teste de Barlett
 
+bartlett.test(wines_sample_numeric)
+
+bartlett.test(wines_sample_numeric_red)
+
+bartlett.test(wines_sample_numeric_white)
+
+bartlett.test(wines_sample_numeric_std)
+
+# Matriz de correlação
+filtered_wines_corr_matrix <- cor(remove_low_msa(wines_sample_numeric))
+print(filtered_wines_corr_matrix)
+
+# Cálculo KMO
+filtered_wines_kmo <- KMO(filtered_wines_corr_matrix)
+print(filtered_wines_kmo)
+
+# Critério de Kaiser 
+filtered_wines_kaiser_eigenvalues <- eigen(filtered_wines_corr_matrix)$values
+print(filtered_wines_kaiser_eigenvalues)
+filtered_wines_factors_kaiser <- sum(filtered_wines_kaiser_eigenvalues > 1) # critério pro número de fatores
+print(filtered_wines_factors_kaiser)
+
+# Scree Plot
+plot(filtered_wines_kaiser_eigenvalues, type = "b", main = "Scree Plot", xlab = "Número de Fatores", ylab = "Autovalores")
+filtered_wines_second_derivative <- diff(diff(filtered_wines_kaiser_eigenvalues))
+elbow <- which.max(filtered_wines_second_derivative) + 1
+
+lines(c(elbow,elbow), c(0, filtered_wines_kaiser_eigenvalues[elbow]), col="red", lty = 2, lwd = 2 ) # Aponta número de fatores ideal
+
+# Fixando o número ideal de fatores segundo o critério de Kaiser
+filtered_wines_n_factors <- filtered_wines_factors_kaiser
+
+# Realizando a análise fatorial
+filtered_wines_fa <- fa(wines_sample_numeric, nfactors = filtered_wines_n_factors, fm = "minchi")
+print(filtered_wines_fa)
+
+# Realizando a análise fatorial aplicando rotação ortogonal
+filtered_wines_fa_varimax <- fa(wines_sample_numeric, nfactors = filtered_wines_n_factors, rotate = "varimax", fm = "minchi")
+print(filtered_wines_fa_varimax)
+
+# Análise dos componentes principais após rotação ortogonal (Varimax)
+filtered_wines_varimax_pca_result <-principal(wines_sample_numeric, nfactors = filtered_wines_n_factors, rotate = "varimax")
+print(filtered_wines_varimax_pca_result)
+
+# Análise dos resultados da análise fatorial
+print(filtered_wines_fa$loadings)
+print(filtered_wines_fa$communalities)
+print(filtered_wines_fa$Vaccounted)
+
+# Gráfico das cargas fatoriais (loadings)
+fa.diagram(filtered_wines_fa)
+
+# Mapa de calor das cargas
+corrplot
 
 ## Exemplo Análise Fatorial
 data("swiss")
 View(swiss)
+
 # Matriz de correlação
 corr_matrix <- cor(swiss)
 print(corr_matrix)
@@ -97,6 +171,7 @@ lines(c(elbow,elbow), c(0, kaiser_eigenvalues[elbow]), col="red", lty =2, lwd =2
 factor_number <- factors_kaiser
 factorial_analysis <- fa(r = corr_matrix, nfactors = factor_number, rotate ="varimax", fm = "ml")
 print(factorial_analysis)
+
 ## Regressão Logística
 
 # Preparação das variáveis para os modelos de regressão de Ridge e Lasso

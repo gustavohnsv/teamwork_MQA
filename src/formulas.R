@@ -1,22 +1,22 @@
 # Realiza o teste ANOVA para análise das médias de amostras (teste paramétrico)
-test_ANOVA <- function(data, var, group) {
-  return(summary(aov(var ~ group, data = data)))
-}
+#test_ANOVA <- function(data, var, group) {
+#  return(summary(aov(var ~ group, data = data)))
+#}
 
 # Realiza o teste de Kruskal-Wallis para análise das médias de amostras (teste não paramétrico)
-test_KruskalWallis <- function(data, var, group) {
-  return(kruskal.test(formula = var ~ group, data = data))
-}
+#test_KruskalWallis <- function(data, var, group) {
+#  return(kruskal.test(formula = var ~ group, data = data))
+#}
 
 # Realiza o teste de Levene para análise das variâncias de amostras
-test_Levene <- function(var, group) {
-  return(leveneTest(y = var, group = as.factor(group)))
-}
+#test_Levene <- function(var, group) {
+#  return(leveneTest(y = var, group = as.factor(group)))
+#}
 
 # Realiza o teste de Dunn para analisar quais dos grupos se diferem baseado no teste Kruskal-Wallis (não paramétrico)
-test_Dunn <- function(data, var, group) {
-  return(dunnTest(var ~ as.factor(group), data = data, method="bonferroni"))
-}
+#test_Dunn <- function(data, var, group) {
+#  return(dunnTest(var ~ as.factor(group), data = data, method="bonferroni"))
+#}
 
 # Realiza o teste de Correlação de Pearson para duas variáveis de uma amostra
 test_Corr <- function(var1, var2) {
@@ -28,63 +28,63 @@ test_Corr <- function(var1, var2) {
 }
 
 # Aplica um modelo de regressão linear múltipla e aplica o processo de stepwise para refinar o modelo
-test_MultipleCorrelation <- function(data, y, ...) {
-  response <- enquo(y)
-  predictors <- quos(...)
-  response_name <- quo_name(response)
-  predictors_names <- sapply(predictors, quo_name)
-  formula <- reformulate(termlabels = predictors_names, response = response_name)
-  model <- lm(formula = formula, data = data)
-  stepwise_model <- step(model, direction = "both", k = log(nrow(data)), trace = TRUE)
-  return(stepwise_model)
-}
+#test_MultipleCorrelation <- function(data, y, ...) {
+#  response <- enquo(y)
+#  predictors <- quos(...)
+#  response_name <- quo_name(response)
+#  predictors_names <- sapply(predictors, quo_name)
+#  formula <- reformulate(termlabels = predictors_names, response = response_name)
+#  model <- lm(formula = formula, data = data)
+#  stepwise_model <- step(model, direction = "both", k = log(nrow(data)), trace = TRUE)
+#  return(stepwise_model)
+#}
 
 # Realiza o teste de Shapiro-Wilk para garantir se uma variável númerica segue uma curva normal 
-test_ShapiroWilk <- function(data) {
-  if (is.numeric(data)) {
-    return(shapiro.test(data))
-  } else {
-    message("Insira uma coluna númerica!")
-  }
-}
+#test_ShapiroWilk <- function(data) {
+#  if (is.numeric(data)) {
+#    return(shapiro.test(data))
+#  } else {
+#    message("Insira uma coluna númerica!")
+#  }
+#}
 
 # Realiza o teste de Shapiro-Wilk para garantir se todas as variáveis númericas seguem uma distribuição normal 
-testDataframe_ShapiroWilk <- function(data) {
-  num <- ncol(data)
-  for (j in 1:num) {
-    if (is.numeric(data[, j])) {
-      print(colnames(data[j]))
-      print(shapiro.test(data[, j]))
-    }
-  }
-}
+#testDataframe_ShapiroWilk <- function(data) {
+#  num <- ncol(data)
+#  for (j in 1:num) {
+#    if (is.numeric(data[, j])) {
+#      print(colnames(data[j]))
+#      print(shapiro.test(data[, j]))
+#    }
+# }
+#}
 
 # Realiza o teste de Anderson-Darling para garantir se uma variável númerica segue uma curva normal
-test_AndersonDarling <- function(data) {
-  if (is.numeric(data)) {
-    return(ad.test(data))
-  } else {
-    message("Insira uma coluna númerica!")
-  }
-}
+#test_AndersonDarling <- function(data) {
+# if (is.numeric(data)) {
+#    return(ad.test(data))
+# } else {
+#   message("Insira uma coluna númerica!")
+# }
+#}
 
 # Realiza o teste de Anderson-Darling para garantir se todas as variáveis númericas seguem uma distribuição normal 
-testDataframe_AndersonDarling <- function(data) {
-  num <- ncol(data)
-  for (j in 1:num) {
-    if (is.numeric(data[, j])) {
-      print(colnames(data[j]))
-      print(ad.test(data[, j]))
-    }
-  }
-}
+#testDataframe_AndersonDarling <- function(data) {
+# num <- ncol(data)
+# for (j in 1:num) {
+#    if (is.numeric(data[, j])) {
+#      print(colnames(data[j]))
+#      print(ad.test(data[, j]))
+#    }
+#  }
+#}
 
 # Função para calcular a moda
-moda <- function(data) {
-  data <- data[!is.na(data)]
-  uniq_value <- unique(data)
-  uniq_value[which.max(tabulate(match(data, uniq_value)))]
-}
+#moda <- function(data) {
+# data <- data[!is.na(data)]
+# uniq_value <- unique(data)
+# uniq_value[which.max(tabulate(match(data, uniq_value)))]
+#}
 
 # Função para criar tabela de distribuição de frequências com as frequências absolutas, frequências relativas, frequências absolutas acumuladas e frequências relativas acumuladas 
 create_freq_tables <- function(column) {
@@ -149,46 +149,46 @@ standardize_log <- function(x) {
   }
 }
 
-format_odds_ratios <- function(results_df) {
-  if (!all(c("OR", "2.5 %", "97.5 %", "p") %in% names(results_df))) {
-    stop("O data frame deve conter as colunas: 'OR', '2.5 %', '97.5 %', 'p'")
-  }
-  
-  for (i in 1:nrow(results_df)) {
-    or <- results_df$OR[i]
-    lower_ci <- results_df$`2.5 %`[i]
-    upper_ci <- results_df$`97.5 %`[i]
-    p_value <- results_df$p[i]
-    
-    or_percentage <- sprintf("%.2f%%", (or - 1) * 100)
-    lower_ci_percentage <- sprintf("%.2f%%", (lower_ci - 1) * 100)
-    upper_ci_percentage <- sprintf("%.2f%%", (upper_ci - 1) * 100)
-    p_value_formatted <- format(p_value, scientific = FALSE)
-    
-    cat(sprintf("OR: %s (IC: [%s, %s]) - p: %s\n", 
-                or_percentage, lower_ci_percentage, upper_ci_percentage, p_value_formatted))
-  }
-}
+#format_odds_ratios <- function(results_df) {
+# if (!all(c("OR", "2.5 %", "97.5 %", "p") %in% names(results_df))) {
+#   stop("O data frame deve conter as colunas: 'OR', '2.5 %', '97.5 %', 'p'")
+# }
+# 
+# for (i in 1:nrow(results_df)) {
+#   or <- results_df$OR[i]
+#   lower_ci <- results_df$`2.5 %`[i]
+#   upper_ci <- results_df$`97.5 %`[i]
+#   p_value <- results_df$p[i]
+#   
+#   or_percentage <- sprintf("%.2f%%", (or - 1) * 100)
+#   lower_ci_percentage <- sprintf("%.2f%%", (lower_ci - 1) * 100)
+#   upper_ci_percentage <- sprintf("%.2f%%", (upper_ci - 1) * 100)
+#   p_value_formatted <- format(p_value, scientific = FALSE)
+#   
+#   cat(sprintf("OR: %s (IC: [%s, %s]) - p: %s\n", 
+#               or_percentage, lower_ci_percentage, upper_ci_percentage, p_value_formatted))
+# }
+#}
 
 # Função para calcular AIC e BIC
-calculate_aic_bic <- function(fit, X, y) {
-  n <- length(y)
-  
-  # Prever os valores ajustados
-  y_pred <- predict(fit, X, s = fit$lambda.min)
-  
-  # Calcular RSS (soma dos resíduos quadrados)
-  rss <- sum((y - y_pred)^2)
-  
-  # Contar número de parâmetros não zero
-  nonzero_params <- sum(coef(fit, s = fit$lambda.min) != 0)
-  
-  # Calcular AIC e BIC
-  aic <- n * log(rss/n) + 2 * nonzero_params
-  bic <- n * log(rss/n) + log(n) * nonzero_params
-  
-  return(list(AIC = aic, BIC = bic))
-}
+#calculate_aic_bic <- function(fit, X, y) {
+# n <- length(y)
+# 
+# # Prever os valores ajustados
+#  y_pred <- predict(fit, X, s = fit$lambda.min)
+# 
+# # Calcular RSS (soma dos resíduos quadrados)
+# rss <- sum((y - y_pred)^2)
+# 
+# # Contar número de parâmetros não zero
+# nonzero_params <- sum(coef(fit, s = fit$lambda.min) != 0)
+# 
+# # Calcular AIC e BIC
+# aic <- n * log(rss/n) + 2 * nonzero_params
+# bic <- n * log(rss/n) + log(n) * nonzero_params
+# 
+# return(list(AIC = aic, BIC = bic))
+#}
 
 # Função para remover outliers de um dataframe com base nos quartis
 no_outliers_df <- function(dataframe){
@@ -201,4 +201,32 @@ no_outliers_df <- function(dataframe){
       upper <- Q3 + 1.5 * IQR
       ifelse(.x >= lower & .x <= upper, .x, NA) # Substitui outliers por NA
     }))
+}
+
+# Função para remover variáveis com MSA < 0.5
+remove_low_msa <- function(data) {
+  # Calcular a matriz de correlação
+  correlation_matrix <- cor(data)
+  
+  # Calcular o KMO
+  kmo_result <- KMO(correlation_matrix)
+  
+  # Obter os valores MSA individuais
+  msa_values <- kmo_result$MSAi
+  
+  # Filtrar variáveis com MSA >= 0.5
+  variables_to_keep <- names(msa_values[msa_values >= 0.5])
+  
+  # Retornar um dataframe com as variáveis filtradas
+  filtered_data <- data[, variables_to_keep, drop = FALSE]
+  
+  # Mensagem informando quais variáveis foram removidas
+  removed_variables <- names(msa_values[msa_values < 0.5])
+  if (length(removed_variables) > 0) {
+    cat("Variáveis removidas (MSA < 0.5):", paste(removed_variables, collapse = ", "), "\n")
+  } else {
+    cat("Nenhuma variável foi removida.\n")
+  }
+  
+  return(filtered_data)
 }

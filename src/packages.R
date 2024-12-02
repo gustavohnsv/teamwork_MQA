@@ -17,10 +17,10 @@ if (!requireNamespace("ggplot2", quietly = TRUE)) {
 library(ggplot2)
 
 # Biblioteca para exibição de mapa de calor (Correlação)
-#if (!requireNamespace("pheatmap", quietly = TRUE)) {
-#  install.packages("pheatmap")
-#}
-#library(pheatmap)
+if (!requireNamespace("pheatmap", quietly = TRUE)) {
+  install.packages("pheatmap")
+}
+library(pheatmap)
 
 # Biblioteca para tratamento de dados, permite a manipulação de data frames e matrizes
 if (!requireNamespace("reshape", quietly = TRUE)) {
@@ -124,3 +124,9 @@ if (!requireNamespace("psych", quietly = TRUE)) {
   install.packages("psych")
 }
 library(psych)
+
+# Biblioteca para rotações de vetores
+if (!requireNamespace("stats", quietly = TRUE)) {
+  install.packages("stats")
+}
+library(stats)
