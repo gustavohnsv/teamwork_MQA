@@ -135,7 +135,7 @@ print(filtered_wines_fa$Vaccounted)
 fa.diagram(filtered_wines_fa_varimax)
 fa.diagram(filtered_wines_fa)
 
-# Mapa de calor das cargas
+# Mapa de calor para as cargas da análise fatorial com rotação Varimax
 corrplot(filtered_wines_fa_varimax$loadings, 
          title = "Mapa de calor para cargas fatoriais rotacionadas via Varimax",
          is.corr = FALSE, 
@@ -151,6 +151,7 @@ corrplot(filtered_wines_fa_varimax$loadings,
          diag = FALSE, 
          mar = c(0,0,1,0))
 
+# Mapa de calor para as cargas da análise fatorial sem rotação
 corrplot(filtered_wines_fa$loadings, 
          title = "Mapa de calor para cargas fatoriais",
          is.corr = FALSE, 

@@ -26,20 +26,74 @@ ggplot(wines_long_z_score, aes(x = Variable, y = Value)) +
        x = "Variáveis",
        y = "Valores")
 
-# Boxplot da varíavel residual.sugar padronizaada para a amostra de 500 elementos
-ggplot(wines_sample, aes(x = "", y = residual.sugar)) +
+# Boxplot da varíavel residual.sugar padronizada para a amostra de 500 elementos
+ggplot(wines_sample_numeric, aes(x = "", y = residual.sugar)) +
   stat_boxplot(geom = "errorbar", width = 0.15) +
   geom_boxplot(fill = "red", alpha = 0.5) +
-  labs(title = "Boxplot para açúcar residual", y = "Açúcar residual")
+  labs(title = "Boxplot para Açúcar residual", y = "Açúcar residual")
 
-# Boxplot da varíavel fixed.acidity padronizaada para a amostra de 500 elementos
-ggplot(wines_sample, aes(x = "", y = fixed.acidity)) +
+# Boxplot da varíavel fixed.acidity padronizada para a amostra de 500 elementos
+ggplot(wines_sample_numeric, aes(x = "", y = fixed.acidity)) +
   stat_boxplot(geom = "errorbar", width = 0.15) +
   geom_boxplot(fill = "blue", alpha = 0.5) +
-  labs(title = "Boxplot para acidez fixa", y = "Acidez fixa")
+  labs(title = "Boxplot para Acidez fixa", y = "Acidez fixa")
+
+# Boxplot da varíavel density padronizada para a amostra de 500 elementos
+ggplot(wines_sample_numeric, aes(x = "", y = density)) +
+  stat_boxplot(geom = "errorbar", width = 0.15) +
+  geom_boxplot(fill = "yellow", alpha = 0.5) +
+  labs(title = "Boxplot para Densidade", y = "Densidade")
+
+# Boxplot da varíavel alcohol padronizada para a amostra de 500 elementos
+ggplot(wines_sample_numeric, aes(x = "", y = alcohol)) +
+  stat_boxplot(geom = "errorbar", width = 0.15) +
+  geom_boxplot(fill = "grey", alpha = 0.5) +
+  labs(title = "Boxplot para Álcool", y = "Álcool")
+
+# Boxplot da varíavel total.sulfur.dioxide padronizada para a amostra de 500 elementos
+ggplot(wines_sample_numeric, aes(x = "", y = total.sulfur.dioxide)) +
+  stat_boxplot(geom = "errorbar", width = 0.15) +
+  geom_boxplot(fill = "green", alpha = 0.5) +
+  labs(title = "Boxplot para Dióxido de enxofre total", y = "Dióxido de enxofre total")
+
+# Boxplot da varíavel free.sulfur.dioxide padronizada para a amostra de 500 elementos
+ggplot(wines_sample_numeric, aes(x = "", y = free.sulfur.dioxide)) +
+  stat_boxplot(geom = "errorbar", width = 0.15) +
+  geom_boxplot(fill = "lavender", alpha = 0.5) +
+  labs(title = "Boxplot para Dióxido de enxofre livre", y = "Dióxido de enxofre livre")
+
+# Boxplot da varíavel chlorides padronizada para a amostra de 500 elementos
+ggplot(wines_sample_numeric, aes(x = "", y = chlorides)) +
+  stat_boxplot(geom = "errorbar", width = 0.15) +
+  geom_boxplot(fill = "pink", alpha = 0.5) +
+  labs(title = "Boxplot para Cloretos", y = "Cloretos")
+
+# Boxplot da varíavel volatile.acidity padronizada para a amostra de 500 elementos
+ggplot(wines_sample_numeric, aes(x = "", y = volatile.acidity)) +
+  stat_boxplot(geom = "errorbar", width = 0.15) +
+  geom_boxplot(fill = "blueviolet", alpha = 0.5) +
+  labs(title = "Boxplot para Acidez volátil", y = "Acidez volátil")
+
+# Boxplot da varíavel sulphates padronizada para a amostra de 500 elementos
+ggplot(wines_sample_numeric, aes(x = "", y = sulphates)) +
+  stat_boxplot(geom = "errorbar", width = 0.15) +
+  geom_boxplot(fill = "beige", alpha = 0.5) +
+  labs(title = "Boxplot para Sulfatos", y = "Sulfatos")
+
+# Boxplot da varíavel pH padronizada para a amostra de 500 elementos
+ggplot(wines_sample_numeric, aes(x = "", y = pH)) +
+  stat_boxplot(geom = "errorbar", width = 0.15) +
+  geom_boxplot(fill = "brown", alpha = 0.5) +
+  labs(title = "Boxplot para pH", y = "pH")
+
+# Boxplot da varíavel citric.acid padronizada para a amostra de 500 elementos
+ggplot(wines_sample_numeric, aes(x = "", y = citric.acid)) +
+  stat_boxplot(geom = "errorbar", width = 0.15) +
+  geom_boxplot(fill = "orange", alpha = 0.5) +
+  labs(title = "Boxplot para Ácido cítrico", y = "Ácido cítrico")
 
 # Histograma com uma curva de densidade para a variável residual.sugar para a amostra de 500 elementos
-ggplot(wines_sample, aes(x = residual.sugar)) +
+ggplot(wines_sample_numeric, aes(x = residual.sugar)) +
   geom_histogram(aes(y = after_stat(density)), colour = 1, fill = "#FFFFFF", bins = 100) +
   geom_density(lwd = 1.2, linetype = 2, colour = "red", fill = "red", alpha = 0.25) +
   labs(title = "Histograma com curva de densidade para açúcar residual", x = "Açúcar residual", y = "Densidade")
