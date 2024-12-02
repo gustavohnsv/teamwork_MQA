@@ -1,6 +1,9 @@
 # Converte o valor númerico para um fator
 wines$colour <- as.factor(wines$colour)
 
+# Remove a coluna 'quality'
+# wines <- wines[, -12]
+
 # Sorteia 5000 observações para compor uma "amostra da amostra"
 wines_sample <- wines[sample(nrow(wines), size = 500, replace = FALSE), ]
 wines_sample_red <- wines_red[sample(nrow(wines_red), size = 500, replace = FALSE), , drop = FALSE]
@@ -14,7 +17,6 @@ wines_standardized <- as.data.frame(lapply(wines_sample, standardize_z_score))
 wines_sample_numeric <- wines_sample[, sapply(wines_sample, is.numeric)]
 wines_sample_numeric_red <- wines_sample_red[, sapply(wines_sample_red, is.numeric)]
 wines_sample_numeric_white <- wines_sample_white[, sapply(wines_sample_white, is.numeric), drop = FALSE]
-
 wines_sample_numeric_std <- wines_sample_white[, sapply(wines_standardized, is.numeric), drop = FALSE]
 
 # Obtem o número de colunas de "wines_numeric"
@@ -49,62 +51,76 @@ rm(i, j, wines_numeric_cols, corr_test_result)
 
 # Cálculo do KMO
 
+# Cálculo do KMO para amostra com vinhos mistos
 kmo_method <- KMO(cor(wines_sample_numeric))
 print(kmo_method)
 
+# Cálculo do KMO para amostra com vinhos tintos
 kmo_method_red <- KMO(cor(wines_sample_numeric_red))
 print(kmo_method_red)
 
+# Cálculo do KMO para amostra com vinhos brancos
 kmo_method_white <- KMO(cor(wines_sample_numeric_white))
 print(kmo_method_white)
 
+# Cálculo do KMO para amostra com vinhos mistos padronizados
 kmo_method_standardized <- KMO(cor(wines_sample_numeric_std))
 print(kmo_method_standardized)
 
 # Cálculo do KMO retirando as variáveis com um MSA < 0.5
 
-# Aplicar a função aos diferentes subconjuntos de dados
+# Recalculando o KMO para amostra com vinhos mistos
 kmo_method_after_filter <- KMO(cor(remove_low_msa(wines_sample_numeric)))
 print(kmo_method_after_filter)
 
+# Recalculando o KMO para amostra com vinhos tintos
 kmo_method_after_filter_red <- KMO(cor(remove_low_msa(wines_sample_numeric_red)))
 print(kmo_method_after_filter_red)
 
+# Recalculando o KMO para amostra com vinhos brancos
 kmo_method_after_filter_white <- KMO(cor(remove_low_msa(wines_sample_numeric_white)))
 print(kmo_method_after_filter_white)
 
+# Recalculando o KMO para amostra com vinhos mistos padronizados
 kmo_method_after_filter_std <- KMO(cor(remove_low_msa(wines_sample_numeric_std)))
 print(kmo_method_after_filter_std)
 
 # Teste de Barlett
 
+# Alicando teste de Bartlett para amostra com vinhos mistos
 bartlett.test(wines_sample_numeric)
 
+# Alicando teste de Bartlett para amostra com vinhos tintos
 bartlett.test(wines_sample_numeric_red)
 
+# Alicando teste de Bartlett para amostra com vinhos brancos
 bartlett.test(wines_sample_numeric_white)
 
+# Alicando teste de Bartlett para amostra com vinhos mistos padronizados
 bartlett.test(wines_sample_numeric_std)
 
 # Matriz de correlação
 filtered_wines_corr_matrix <- cor(remove_low_msa(wines_sample_numeric))
 print(filtered_wines_corr_matrix)
 
-# Cálculo KMO
+# Fixando o cálculo do KMO para a amostra de vinhos mistos sem padronização
 filtered_wines_kmo <- KMO(filtered_wines_corr_matrix)
 print(filtered_wines_kmo)
 
-# Critério de Kaiser 
+# Critério de Kaiser para obtenção dos autovalores
 filtered_wines_kaiser_eigenvalues <- eigen(filtered_wines_corr_matrix)$values
 print(filtered_wines_kaiser_eigenvalues)
+
+# Fixando o número ideal de fatores com base nos autovalores maiores que 1 
 filtered_wines_factors_kaiser <- sum(filtered_wines_kaiser_eigenvalues > 1) # critério pro número de fatores
 print(filtered_wines_factors_kaiser)
 
-# Scree Plot
+# Scree Plot para obtenção dos autovalores
 plot(filtered_wines_kaiser_eigenvalues, type = "b", main = "Scree Plot", xlab = "Número de Fatores", ylab = "Autovalores")
 filtered_wines_second_derivative <- diff(diff(filtered_wines_kaiser_eigenvalues))
 elbow <- which.max(filtered_wines_second_derivative) + 1
 
+# Identificação do número ideal de fatores com base no intercepto do gráfico
 lines(c(elbow,elbow), c(0, filtered_wines_kaiser_eigenvalues[elbow]), col="red", lty = 2, lwd = 2 ) # Aponta número de fatores ideal
 
 # Fixando o número ideal de fatores segundo o critério de Kaiser
@@ -122,18 +138,19 @@ print(filtered_wines_fa_varimax)
 filtered_wines_varimax_pca_result <-principal(wines_sample_numeric, nfactors = filtered_wines_n_factors, rotate = "varimax")
 print(filtered_wines_varimax_pca_result)
 
-# Análise dos resultados da análise fatorial
-print(filtered_wines_fa_varimax$loadings)
-print(filtered_wines_fa_varimax$communalities)
-print(filtered_wines_fa_varimax$Vaccounted)
+# Análise dos resultados da análise fatorial após rotação via Varimax
+print(filtered_wines_fa_varimax$loadings) # Cargas fatoriais
+print(filtered_wines_fa_varimax$communalities) # Comunidade
+print(filtered_wines_fa_varimax$Vaccounted) # Variância explicada
 
-print(filtered_wines_fa$loadings)
-print(filtered_wines_fa$communalities)
-print(filtered_wines_fa$Vaccounted)
+# Análise dos resultados da análise fatorial
+print(filtered_wines_fa$loadings) # Cargas fatoriais
+print(filtered_wines_fa$communalities) # Comunidade
+print(filtered_wines_fa$Vaccounted) # Variância explicada
 
 # Gráficos das cargas fatoriais (loadings)
-fa.diagram(filtered_wines_fa_varimax)
-fa.diagram(filtered_wines_fa)
+fa.diagram(filtered_wines_fa_varimax, main = "Gráfico das cargas fatoriais rotacionadas via Varimax")
+fa.diagram(filtered_wines_fa, main = "Gráfico das cargas fatoriais")
 
 # Mapa de calor para as cargas da análise fatorial com rotação Varimax
 corrplot(filtered_wines_fa_varimax$loadings, 
