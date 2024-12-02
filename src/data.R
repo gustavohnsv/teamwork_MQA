@@ -123,15 +123,48 @@ filtered_wines_varimax_pca_result <-principal(wines_sample_numeric, nfactors = f
 print(filtered_wines_varimax_pca_result)
 
 # Análise dos resultados da análise fatorial
+print(filtered_wines_fa_varimax$loadings)
+print(filtered_wines_fa_varimax$communalities)
+print(filtered_wines_fa_varimax$Vaccounted)
+
 print(filtered_wines_fa$loadings)
 print(filtered_wines_fa$communalities)
 print(filtered_wines_fa$Vaccounted)
 
-# Gráfico das cargas fatoriais (loadings)
+# Gráficos das cargas fatoriais (loadings)
+fa.diagram(filtered_wines_fa_varimax)
 fa.diagram(filtered_wines_fa)
 
 # Mapa de calor das cargas
-corrplot
+corrplot(filtered_wines_fa_varimax$loadings, 
+         title = "Mapa de calor para cargas fatoriais rotacionadas via Varimax",
+         is.corr = FALSE, 
+         method = "color", 
+         col = colorRampPalette(c("blue", "white", "red"))(200),
+         type = "full", 
+         order = "original", 
+         addCoef.col = "black",
+         number.cex = 0.8, 
+         tl.col = "darkblue", 
+         tl.srt = 45, 
+         tl.cex = 1, 
+         diag = FALSE, 
+         mar = c(0,0,1,0))
+
+corrplot(filtered_wines_fa$loadings, 
+         title = "Mapa de calor para cargas fatoriais",
+         is.corr = FALSE, 
+         method = "color", 
+         col = colorRampPalette(c("blue", "white", "red"))(200),
+         type = "full", 
+         order = "original", 
+         addCoef.col = "black",
+         number.cex = 0.8, 
+         tl.col = "darkblue", 
+         tl.srt = 45, 
+         tl.cex = 1, 
+         diag = FALSE, 
+         mar = c(0,0,1,0))
 
 ## Exemplo Análise Fatorial
 data("swiss")
