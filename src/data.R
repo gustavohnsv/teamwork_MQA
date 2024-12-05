@@ -14,6 +14,8 @@ wines_standardized <- as.data.frame(lapply(wines_sample, standardize_z_score))
 
 # Cria um subset apenas com as colunas que são númericas
 
+wines_numeric <- wines[, sapply(wines, is.numeric)]
+
 wines_sample_numeric <- wines_sample[, sapply(wines_sample, is.numeric)]
 wines_sample_numeric_red <- wines_sample_red[, sapply(wines_sample_red, is.numeric)]
 wines_sample_numeric_white <- wines_sample_white[, sapply(wines_sample_white, is.numeric), drop = FALSE]
@@ -127,7 +129,7 @@ lines(c(elbow,elbow), c(0, filtered_wines_kaiser_eigenvalues[elbow]), col="red",
 filtered_wines_n_factors <- filtered_wines_factors_kaiser
 
 # Realizando a análise fatorial
-filtered_wines_fa <- fa(wines_sample_numeric, nfactors = filtered_wines_n_factors, fm = "minchi")
+filtered_wines_fa <- fa(wines_sample_numeric, nfactors = filtered_wines_n_factors, rotate = "none", fm = "minchi")
 print(filtered_wines_fa)
 
 # Realizando a análise fatorial aplicando rotação ortogonal
