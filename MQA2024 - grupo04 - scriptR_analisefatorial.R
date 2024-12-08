@@ -1,33 +1,3 @@
-#Carregamento do dataset
-
-
-
-# Definindo o diretório de trabalho para a localização do arquivo "winequality.csv"
-setwd(dirname(dirname(getActiveDocumentContext()$path)))
-
-# Caminho para o arquivo único com todos os vinhos
-file_path <- "./data/winequality-both.csv"
-
-if (!file.exists(file_path)) {
-  # Verifica se o arquivo para todos os vinhos existem
-  message("File not found at ", file_path)
-} else {
-  wines <- tryCatch({
-    # Leitura dos dados do arquivo único
-    read.csv(file_path, header = TRUE, sep = ",")
-  }, error = function(e) {
-    message("Error reading file: ", e$message)
-    NULL
-  })
-}
-
-if (!is.null(wines)) {
-  # Verifica se os dados foram lidos com sucesso
-  message("All wines file read successfully")
-}
-
-
-
 #Carregamento das bibliotecas que serão usadas
 
 
@@ -109,6 +79,36 @@ if (!requireNamespace("corrplot", quietly = TRUE)) {
   install.packages("corrplot")
 }
 library(corrplot)
+
+
+
+#Carregamento do dataset
+
+
+
+# Definindo o diretório de trabalho para a localização do arquivo "winequality.csv"
+setwd(dirname(dirname(getActiveDocumentContext()$path)))
+
+# Caminho para o arquivo único com todos os vinhos
+file_path <- "./data/winequality-both.csv"
+
+if (!file.exists(file_path)) {
+  # Verifica se o arquivo para todos os vinhos existem
+  message("File not found at ", file_path)
+} else {
+  wines <- tryCatch({
+    # Leitura dos dados do arquivo único
+    read.csv(file_path, header = TRUE, sep = ",")
+  }, error = function(e) {
+    message("Error reading file: ", e$message)
+    NULL
+  })
+}
+
+if (!is.null(wines)) {
+  # Verifica se os dados foram lidos com sucesso
+  message("All wines file read successfully")
+}
 
 
 
